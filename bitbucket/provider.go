@@ -5,7 +5,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/ktrysmt/go-bitbucket"
+	gobb "github.com/ktrysmt/go-bitbucket"
 )
 
 func Provider() *schema.Provider {
@@ -25,16 +25,21 @@ func Provider() *schema.Provider {
 			},
 		},
 
-		DataSourcesMap: map[string]*schema.Resource{},
+		DataSourcesMap: map[string]*schema.Resource{
+			"bitbucket_project":   dataSourceBitBucketProject(),
+			"bitbucket_workspace": dataSourceBitBucketWorkspace(),
+		},
 
-		ResourcesMap: map[string]*schema.Resource{},
+		ResourcesMap: map[string]*schema.Resource{
+			"bitbucket_project": resourceBitBucketProject(),
+		},
 
 		ConfigureContextFunc: configureProvider,
 	}
 }
 
 func configureProvider(ctx context.Context, resourceData *schema.ResourceData) (interface{}, diag.Diagnostics) {
-	client := bitbucket.NewBasicAuth(
+	client := gobb.NewBasicAuth(
 		resourceData.Get("username").(string),
 		resourceData.Get("password").(string),
 	)
