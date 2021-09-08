@@ -26,12 +26,14 @@ func Provider() *schema.Provider {
 		},
 
 		DataSourcesMap: map[string]*schema.Resource{
-			"bitbucket_project":   dataSourceBitBucketProject(),
-			"bitbucket_workspace": dataSourceBitBucketWorkspace(),
+			"bitbucket_project":    dataSourceBitBucketProject(),
+			"bitbucket_repository": dataSourceBitBucketRepository(),
+			"bitbucket_workspace":  dataSourceBitBucketWorkspace(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			"bitbucket_project": resourceBitBucketProject(),
+			"bitbucket_project":    resourceBitBucketProject(),
+			"bitbucket_repository": resourceBitBucketRepository(),
 		},
 
 		ConfigureContextFunc: configureProvider,
