@@ -56,7 +56,7 @@ func resourceBitBucketRepository() *schema.Resource {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Default:      "no_forks",
-				ValidateFunc: validation.StringNotInSlice([]string{"allow_forks", "no_public_forks", "no_forks"}, false),
+				ValidateFunc: validation.StringInSlice([]string{"allow_forks", "no_public_forks", "no_forks"}, false),
 				DiffSuppressFunc: func(k, old, new string, resourceData *schema.ResourceData) bool {
 					return resourceData.Get("is_private").(bool) == false
 				},
