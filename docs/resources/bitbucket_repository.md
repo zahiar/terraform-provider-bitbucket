@@ -37,7 +37,7 @@ In addition to the arguments above, the following additional attributes are expo
 * `id` - The UUID of the repository.
 
 ## Import
-BitBucket repository can be imported with a combination of its workspace slug/uuid & name.
+BitBucket repository can be imported with a combination of its workspace slug/UUID & name.
 
 ### Example using workspace slug & repository name
 ```sh

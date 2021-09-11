@@ -15,24 +15,29 @@ func dataSourceBitBucketWorkspace() *schema.Resource {
 		ReadContext: dataSourceBitBucketWorkspaceRead,
 		Schema: map[string]*schema.Schema{
 			"id": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Description: "The UUID of the workspace.",
+				Type:        schema.TypeString,
+				Computed:    true,
 			},
 			"type": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Description: "The type of the workspace.",
+				Type:        schema.TypeString,
+				Computed:    true,
 			},
 			"slug": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Description: "The slug of the workspace.",
+				Type:        schema.TypeString,
+				Computed:    true,
 			},
 			"is_private": {
-				Type:     schema.TypeBool,
-				Computed: true,
+				Description: "A boolean to state if the project is private or not.",
+				Type:        schema.TypeBool,
+				Computed:    true,
 			},
 			"name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Description: "The name of the workspace.",
+				Type:        schema.TypeString,
+				Required:    true,
 			},
 		},
 	}

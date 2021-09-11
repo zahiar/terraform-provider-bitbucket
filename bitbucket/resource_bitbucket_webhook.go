@@ -24,31 +24,37 @@ func resourceBitBucketWebhook() *schema.Resource {
 		},
 		Schema: map[string]*schema.Schema{
 			"id": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Description: "The UUID of the webhook.",
+				Type:        schema.TypeString,
+				Computed:    true,
 			},
 			"workspace": {
-				Type:     schema.TypeString,
-				Required: true,
+				Description: "The slug or UUID (including the enclosing `{}`) of the workspace this webhook belongs to.",
+				Type:        schema.TypeString,
+				Required:    true,
 			},
 			"repository": {
+				Description:      "The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).",
 				Type:             schema.TypeString,
 				Required:         true,
 				ValidateDiagFunc: validateRepositoryName,
 			},
 			"description": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "",
+				Description: "The description of the webhook.",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "",
 			},
 			"url": {
+				Description:  "The url to configure the webhook with.",
 				Type:         schema.TypeString,
 				Optional:     true,
 				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"events": {
-				Type: schema.TypeList,
+				Description: "A list of events that will trigger the webhook - see docs for a complete list.",
+				Type:        schema.TypeList,
 				Elem: &schema.Schema{
 					Type:         schema.TypeString,
 					ValidateFunc: validation.StringInSlice([]string{"pullrequest:unapproved", "issue:comment_created", "repo:imported", "repo:created", "repo:commit_comment_created", "pullrequest:approved", "pullrequest:comment_updated", "issue:updated", "project:updated", "repo:deleted", "pullrequest:changes_request_created", "pullrequest:comment_created", "repo:commit_status_updated", "pullrequest:updated", "issue:created", "repo:fork", "pullrequest:comment_deleted", "repo:commit_status_created", "repo:updated", "pullrequest:rejected", "pullrequest:fulfilled", "pullrequest:created", "pullrequest:changes_request_removed", "repo:transfer", "repo:push"}, false),
@@ -56,9 +62,10 @@ func resourceBitBucketWebhook() *schema.Resource {
 				Optional: true,
 			},
 			"is_active": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Description: "A boolean to state if the webhook is active or not.",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
 			},
 		},
 	}
