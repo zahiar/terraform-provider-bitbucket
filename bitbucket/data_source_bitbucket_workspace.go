@@ -16,13 +16,13 @@ func dataSourceBitBucketWorkspace() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Type:     schema.TypeString,
-				Computed: true,
+				Required: true,
 			},
 			"type": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"slug": {
+			"uuid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
@@ -32,7 +32,7 @@ func dataSourceBitBucketWorkspace() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Required: true,
+				Computed: true,
 			},
 		},
 	}
@@ -41,17 +41,16 @@ func dataSourceBitBucketWorkspace() *schema.Resource {
 func dataSourceBitBucketWorkspaceRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*gobb.Client)
 
-	workspace, err := client.Workspaces.Get(resourceData.Get("name").(string))
+	workspace, err := client.Workspaces.Get(resourceData.Get("id").(string))
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to get workspace with error: %s", err))
 	}
 
 	_ = resourceData.Set("type", workspace.Type)
-	_ = resourceData.Set("slug", workspace.Slug)
+	_ = resourceData.Set("uuid", workspace.UUID)
 	_ = resourceData.Set("is_private", workspace.Is_Private)
 	_ = resourceData.Set("name", workspace.Name)
-
-	resourceData.SetId(workspace.UUID)
+	resourceData.SetId(workspace.Slug)
 
 	return nil
 }
