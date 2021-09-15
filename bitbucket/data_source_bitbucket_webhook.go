@@ -12,36 +12,43 @@ func dataSourceBitBucketWebhook() *schema.Resource {
 		ReadContext: dataSourceBitBucketWebhookRead,
 		Schema: map[string]*schema.Schema{
 			"id": {
-				Type:     schema.TypeString,
-				Required: true,
+				Description: "The UUID of the webhook.",
+				Type:        schema.TypeString,
+				Required:    true,
 			},
 			"workspace": {
-				Type:     schema.TypeString,
-				Required: true,
+				Description: "The slug or UUID (including the enclosing `{}`) of the workspace this webhook belongs to.",
+				Type:        schema.TypeString,
+				Required:    true,
 			},
 			"repository": {
+				Description:      "The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).",
 				Type:             schema.TypeString,
 				Required:         true,
 				ValidateDiagFunc: validateRepositoryName,
 			},
 			"description": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Description: "The description of the webhook.",
+				Type:        schema.TypeString,
+				Computed:    true,
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Description: "The url to configure the webhook with.",
+				Type:        schema.TypeString,
+				Computed:    true,
 			},
 			"events": {
-				Type: schema.TypeList,
+				Description: "A list of events that will trigger the webhook - see docs for a complete list.",
+				Type:        schema.TypeList,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 				Computed: true,
 			},
 			"is_active": {
-				Type:     schema.TypeBool,
-				Computed: true,
+				Description: "A boolean to state if the webhook is active or not.",
+				Type:        schema.TypeBool,
+				Computed:    true,
 			},
 		},
 	}
