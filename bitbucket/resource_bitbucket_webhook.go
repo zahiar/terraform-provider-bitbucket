@@ -39,17 +39,15 @@ func resourceBitBucketWebhook() *schema.Resource {
 				Required:         true,
 				ValidateDiagFunc: validateRepositoryName,
 			},
-			"description": {
-				Description: "The description of the webhook.",
+			"name": {
+				Description: "The name of the webhook.",
 				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "",
+				Required:    true,
 			},
 			"url": {
 				Description:  "The url to configure the webhook with.",
 				Type:         schema.TypeString,
-				Optional:     true,
-				Default:      "",
+				Required:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"events": {
@@ -59,7 +57,7 @@ func resourceBitBucketWebhook() *schema.Resource {
 					Type:         schema.TypeString,
 					ValidateFunc: validation.StringInSlice([]string{"pullrequest:unapproved", "issue:comment_created", "repo:imported", "repo:created", "repo:commit_comment_created", "pullrequest:approved", "pullrequest:comment_updated", "issue:updated", "project:updated", "repo:deleted", "pullrequest:changes_request_created", "pullrequest:comment_created", "repo:commit_status_updated", "pullrequest:updated", "issue:created", "repo:fork", "pullrequest:comment_deleted", "repo:commit_status_created", "repo:updated", "pullrequest:rejected", "pullrequest:fulfilled", "pullrequest:created", "pullrequest:changes_request_removed", "repo:transfer", "repo:push"}, false),
 				},
-				Optional: true,
+				Required: true,
 			},
 			"is_active": {
 				Description: "A boolean to state if the webhook is active or not.",
@@ -78,7 +76,7 @@ func resourceBitBucketWebhookCreate(ctx context.Context, resourceData *schema.Re
 		&gobb.WebhooksOptions{
 			Owner:       resourceData.Get("workspace").(string),
 			RepoSlug:    resourceData.Get("repository").(string),
-			Description: resourceData.Get("description").(string),
+			Description: resourceData.Get("name").(string),
 			Url:         resourceData.Get("url").(string),
 			Active:      resourceData.Get("is_active").(bool),
 			Events:      convertEventsToStringArray(resourceData.Get("events").([]interface{})),
@@ -95,7 +93,7 @@ func resourceBitBucketWebhookCreate(ctx context.Context, resourceData *schema.Re
 
 	resourceData.SetId(webhook.Uuid)
 
-	return nil
+	return resourceBitBucketWebhookRead(ctx, resourceData, meta)
 }
 
 func resourceBitBucketWebhookRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -117,7 +115,7 @@ func resourceBitBucketWebhookRead(ctx context.Context, resourceData *schema.Reso
 		return diag.FromErr(fmt.Errorf("unable to decode webhook response with error: %s", err))
 	}
 
-	_ = resourceData.Set("description", webhook.Description)
+	_ = resourceData.Set("name", webhook.Description)
 	_ = resourceData.Set("url", webhook.Url)
 	_ = resourceData.Set("is_active", webhook.Active)
 	_ = resourceData.Set("events", webhook.Events)
@@ -134,7 +132,7 @@ func resourceBitBucketWebhookUpdate(ctx context.Context, resourceData *schema.Re
 			Uuid:        resourceData.Id(),
 			Owner:       resourceData.Get("workspace").(string),
 			RepoSlug:    resourceData.Get("repository").(string),
-			Description: resourceData.Get("description").(string),
+			Description: resourceData.Get("name").(string),
 			Url:         resourceData.Get("url").(string),
 			Active:      resourceData.Get("is_active").(bool),
 			Events:      convertEventsToStringArray(resourceData.Get("events").([]interface{})),
@@ -144,7 +142,7 @@ func resourceBitBucketWebhookUpdate(ctx context.Context, resourceData *schema.Re
 		return diag.FromErr(fmt.Errorf("unable to update webhook with error: %s", err))
 	}
 
-	return nil
+	return resourceBitBucketWebhookRead(ctx, resourceData, meta)
 }
 
 func resourceBitBucketWebhookDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {

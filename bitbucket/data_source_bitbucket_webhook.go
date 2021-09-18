@@ -27,8 +27,8 @@ func dataSourceBitBucketWebhook() *schema.Resource {
 				Required:         true,
 				ValidateDiagFunc: validateRepositoryName,
 			},
-			"description": {
-				Description: "The description of the webhook.",
+			"name": {
+				Description: "The name of the webhook.",
 				Type:        schema.TypeString,
 				Computed:    true,
 			},

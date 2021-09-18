@@ -25,7 +25,7 @@ The following arguments are supported:
 
 ## Attribute Reference
 In addition to the arguments above, the following additional attributes are exported:
-* `description` - The description of the webhook.
+* `name` - The name of the webhook.
 * `url` - The url the webhook is configured with.
 * `events` - A list of events that will trigger the webhook.
 * `is_active` - A boolean to state if the webhook is active or not.

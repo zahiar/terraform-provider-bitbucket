@@ -15,9 +15,9 @@ func TestAccBitbucketWorkspaceDataSource_basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: fmt.Sprintf(`
-				data "bitbucket_workspace" "testacc" {
-  					id = "%s"
-				}`, os.Getenv("BITBUCKET_USERNAME")),
+					data "bitbucket_workspace" "testacc" {
+						id = "%s"
+					}`, os.Getenv("BITBUCKET_USERNAME")),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.bitbucket_workspace.testacc", "id", os.Getenv("BITBUCKET_USERNAME")),
 					resource.TestCheckResourceAttr("data.bitbucket_workspace.testacc", "type", "workspace"),

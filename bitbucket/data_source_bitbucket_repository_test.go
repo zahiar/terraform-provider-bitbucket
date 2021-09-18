@@ -23,31 +23,31 @@ func TestAccBitbucketRepositoryDataSource_basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: fmt.Sprintf(`
-				data "bitbucket_workspace" "testacc" {
-  					id = "%s"
-				}
-
-				resource "bitbucket_project" "testacc" {
-				  workspace   = data.bitbucket_workspace.testacc.id
-				  name        = "%s"
-				  key         = "%s"
-				  is_private  = true
-				}
-
-				resource "bitbucket_repository" "testacc" {
-				  workspace   = data.bitbucket_workspace.testacc.id
-                  project_key = bitbucket_project.testacc.key
-				  name        = "%s"
-				  description = "%s"
-				  is_private  = true
-				  fork_policy = "no_forks"
-				}
-
-				data "bitbucket_repository" "testacc" {
-				  workspace  = data.bitbucket_workspace.testacc.id
-				  name       = "%s"
-				  depends_on = [bitbucket_repository.testacc]
-				}`, workspaceSlug, projectName, projectKey, repoName, repoDescription, repoName),
+					data "bitbucket_workspace" "testacc" {
+						id = "%s"
+					}
+	
+					resource "bitbucket_project" "testacc" {
+					  workspace   = data.bitbucket_workspace.testacc.id
+					  name        = "%s"
+					  key         = "%s"
+					  is_private  = true
+					}
+	
+					resource "bitbucket_repository" "testacc" {
+					  workspace   = data.bitbucket_workspace.testacc.id
+					  project_key = bitbucket_project.testacc.key
+					  name        = "%s"
+					  description = "%s"
+					  is_private  = true
+					  fork_policy = "no_forks"
+					}
+	
+					data "bitbucket_repository" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  name       = "%s"
+					  depends_on = [bitbucket_repository.testacc]
+					}`, workspaceSlug, projectName, projectKey, repoName, repoDescription, repoName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.bitbucket_repository.testacc", "workspace", workspaceSlug),
 					resource.TestCheckResourceAttr("data.bitbucket_repository.testacc", "name", repoName),

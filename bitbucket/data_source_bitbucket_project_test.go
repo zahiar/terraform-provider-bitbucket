@@ -22,23 +22,23 @@ func TestAccBitbucketProjectDataSource_basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: fmt.Sprintf(`
-				data "bitbucket_workspace" "testacc" {
-  					id = "%s"
-				}
-
-				resource "bitbucket_project" "testacc" {
-				  workspace   = data.bitbucket_workspace.testacc.id
-				  name        = "%s"
-				  key         = "%s"
-				  description = "%s"
-				  is_private  = true
-				}
-
-				data "bitbucket_project" "testacc" {
-				  workspace  = data.bitbucket_workspace.testacc.id
-				  key        = "%s"
-				  depends_on = [bitbucket_project.testacc]
-				}`, workspaceSlug, projectName, projectKey, projectDescription, projectKey),
+					data "bitbucket_workspace" "testacc" {
+						id = "%s"
+					}
+	
+					resource "bitbucket_project" "testacc" {
+					  workspace   = data.bitbucket_workspace.testacc.id
+					  name        = "%s"
+					  key         = "%s"
+					  description = "%s"
+					  is_private  = true
+					}
+	
+					data "bitbucket_project" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  key        = "%s"
+					  depends_on = [bitbucket_project.testacc]
+					}`, workspaceSlug, projectName, projectKey, projectDescription, projectKey),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.bitbucket_project.testacc", "workspace", workspaceSlug),
 					resource.TestCheckResourceAttr("data.bitbucket_project.testacc", "key", projectKey),
