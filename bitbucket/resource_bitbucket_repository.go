@@ -14,14 +14,14 @@ import (
 	gobb "github.com/ktrysmt/go-bitbucket"
 )
 
-func resourceBitBucketRepository() *schema.Resource {
+func resourceBitbucketRepository() *schema.Resource {
 	return &schema.Resource{
-		CreateContext: resourceBitBucketRepositoryCreate,
-		ReadContext:   resourceBitBucketRepositoryRead,
-		UpdateContext: resourceBitBucketRepositoryUpdate,
-		DeleteContext: resourceBitBucketRepositoryDelete,
+		CreateContext: resourceBitbucketRepositoryCreate,
+		ReadContext:   resourceBitbucketRepositoryRead,
+		UpdateContext: resourceBitbucketRepositoryUpdate,
+		DeleteContext: resourceBitbucketRepositoryDelete,
 		Importer: &schema.ResourceImporter{
-			StateContext: resourceBitBucketRepositoryImport,
+			StateContext: resourceBitbucketRepositoryImport,
 		},
 		Schema: map[string]*schema.Schema{
 			"id": {
@@ -72,7 +72,7 @@ func resourceBitBucketRepository() *schema.Resource {
 	}
 }
 
-func resourceBitBucketRepositoryCreate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceBitbucketRepositoryCreate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*gobb.Client)
 
 	repository, err := client.Repositories.Repository.Create(
@@ -91,10 +91,10 @@ func resourceBitBucketRepositoryCreate(ctx context.Context, resourceData *schema
 
 	resourceData.SetId(repository.Uuid)
 
-	return resourceBitBucketRepositoryRead(ctx, resourceData, meta)
+	return resourceBitbucketRepositoryRead(ctx, resourceData, meta)
 }
 
-func resourceBitBucketRepositoryRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceBitbucketRepositoryRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*gobb.Client)
 
 	repository, err := client.Repositories.Repository.Get(
@@ -117,7 +117,7 @@ func resourceBitBucketRepositoryRead(ctx context.Context, resourceData *schema.R
 	return nil
 }
 
-func resourceBitBucketRepositoryUpdate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceBitbucketRepositoryUpdate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*gobb.Client)
 
 	_, err := client.Repositories.Repository.Update(
@@ -135,10 +135,10 @@ func resourceBitBucketRepositoryUpdate(ctx context.Context, resourceData *schema
 		return diag.FromErr(fmt.Errorf("unable to update repository with error: %s", err))
 	}
 
-	return resourceBitBucketRepositoryRead(ctx, resourceData, meta)
+	return resourceBitbucketRepositoryRead(ctx, resourceData, meta)
 }
 
-func resourceBitBucketRepositoryDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceBitbucketRepositoryDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*gobb.Client)
 
 	_, err := client.Repositories.Repository.Delete(
@@ -156,7 +156,7 @@ func resourceBitBucketRepositoryDelete(ctx context.Context, resourceData *schema
 	return nil
 }
 
-func resourceBitBucketRepositoryImport(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+func resourceBitbucketRepositoryImport(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
 	ret := []*schema.ResourceData{resourceData}
 
 	splitID := strings.Split(resourceData.Id(), "/")
@@ -167,7 +167,7 @@ func resourceBitBucketRepositoryImport(ctx context.Context, resourceData *schema
 	_ = resourceData.Set("workspace", splitID[0])
 	_ = resourceData.Set("name", splitID[1])
 
-	_ = resourceBitBucketRepositoryRead(ctx, resourceData, meta)
+	_ = resourceBitbucketRepositoryRead(ctx, resourceData, meta)
 
 	return ret, nil
 }

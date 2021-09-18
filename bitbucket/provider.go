@@ -15,27 +15,27 @@ func Provider() *schema.Provider {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("BITBUCKET_USERNAME", nil),
-				Description: "Username to authenticate with BitBucket.",
+				Description: "Username to authenticate with Bitbucket.",
 			},
 			"password": {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("BITBUCKET_PASSWORD", nil),
-				Description: "Password to authenticate with BitBucket.",
+				Description: "Password to authenticate with Bitbucket.",
 			},
 		},
 
 		DataSourcesMap: map[string]*schema.Resource{
-			"bitbucket_project":    dataSourceBitBucketProject(),
-			"bitbucket_repository": dataSourceBitBucketRepository(),
-			"bitbucket_webhook":    dataSourceBitBucketWebhook(),
-			"bitbucket_workspace":  dataSourceBitBucketWorkspace(),
+			"bitbucket_project":    dataSourceBitbucketProject(),
+			"bitbucket_repository": dataSourceBitbucketRepository(),
+			"bitbucket_webhook":    dataSourceBitbucketWebhook(),
+			"bitbucket_workspace":  dataSourceBitbucketWorkspace(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			"bitbucket_project":    resourceBitBucketProject(),
-			"bitbucket_repository": resourceBitBucketRepository(),
-			"bitbucket_webhook":    resourceBitBucketWebhook(),
+			"bitbucket_project":    resourceBitbucketProject(),
+			"bitbucket_repository": resourceBitbucketRepository(),
+			"bitbucket_webhook":    resourceBitbucketWebhook(),
 		},
 
 		ConfigureContextFunc: configureProvider,
