@@ -1,0 +1,27 @@
+name: "Testing"
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run unit tests
+        run: make test
+
+  acceptance:
+    name: Acceptance Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run acceptance tests
+        run: make testacc
+        env:
+          BITBUCKET_USERNAME: ${{ secrets.BITBUCKET_USERNAME }}
+          BITBUCKET_PASSWORD: ${{ secrets.BITBUCKET_PASSWORD }}
