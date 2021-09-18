@@ -95,7 +95,7 @@ func resourceBitBucketWebhookCreate(ctx context.Context, resourceData *schema.Re
 
 	resourceData.SetId(webhook.Uuid)
 
-	return nil
+	return resourceBitBucketWebhookRead(ctx, resourceData, meta)
 }
 
 func resourceBitBucketWebhookRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -144,7 +144,7 @@ func resourceBitBucketWebhookUpdate(ctx context.Context, resourceData *schema.Re
 		return diag.FromErr(fmt.Errorf("unable to update webhook with error: %s", err))
 	}
 
-	return nil
+	return resourceBitBucketWebhookRead(ctx, resourceData, meta)
 }
 
 func resourceBitBucketWebhookDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {

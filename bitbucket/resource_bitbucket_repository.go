@@ -91,7 +91,7 @@ func resourceBitBucketRepositoryCreate(ctx context.Context, resourceData *schema
 
 	resourceData.SetId(repository.Uuid)
 
-	return nil
+	return resourceBitBucketRepositoryRead(ctx, resourceData, meta)
 }
 
 func resourceBitBucketRepositoryRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -110,7 +110,7 @@ func resourceBitBucketRepositoryRead(ctx context.Context, resourceData *schema.R
 	_ = resourceData.Set("description", repository.Description)
 	_ = resourceData.Set("project_key", repository.Project.Key)
 	_ = resourceData.Set("is_private", repository.Is_private)
-	_ = resourceData.Set("fork_policy", repository.ForkPolicy)
+	_ = resourceData.Set("fork_policy", repository.Fork_policy)
 
 	resourceData.SetId(repository.Uuid)
 
@@ -135,7 +135,7 @@ func resourceBitBucketRepositoryUpdate(ctx context.Context, resourceData *schema
 		return diag.FromErr(fmt.Errorf("unable to update repository with error: %s", err))
 	}
 
-	return nil
+	return resourceBitBucketRepositoryRead(ctx, resourceData, meta)
 }
 
 func resourceBitBucketRepositoryDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {

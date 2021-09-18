@@ -78,7 +78,7 @@ func resourceBitBucketProjectCreate(ctx context.Context, resourceData *schema.Re
 
 	resourceData.SetId(project.Uuid)
 
-	return nil
+	return resourceBitBucketProjectRead(ctx, resourceData, meta)
 }
 
 func resourceBitBucketProjectRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -97,7 +97,7 @@ func resourceBitBucketProjectRead(ctx context.Context, resourceData *schema.Reso
 	_ = resourceData.Set("name", project.Name)
 	_ = resourceData.Set("key", project.Key)
 	_ = resourceData.Set("description", project.Description)
-	_ = resourceData.Set("is_private", project.IsPrivate)
+	_ = resourceData.Set("is_private", project.Is_private)
 
 	resourceData.SetId(project.Uuid)
 
@@ -121,7 +121,7 @@ func resourceBitBucketProjectUpdate(ctx context.Context, resourceData *schema.Re
 		return diag.FromErr(fmt.Errorf("unable to update project with error: %s", err))
 	}
 
-	return nil
+	return resourceBitBucketProjectRead(ctx, resourceData, meta)
 }
 
 func resourceBitBucketProjectDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {

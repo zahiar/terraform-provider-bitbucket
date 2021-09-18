@@ -24,37 +24,37 @@ func TestAccBitbucketWebhookDataSource_basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: fmt.Sprintf(`
-				data "bitbucket_workspace" "testacc" {
-  					id = "%s"
-				}
-
-				resource "bitbucket_project" "testacc" {
-				  workspace  = data.bitbucket_workspace.testacc.id
-				  name       = "%s"
-				  key        = "%s"
-				  is_private = true
-				}
-
-				resource "bitbucket_repository" "testacc" {
-				  workspace   = data.bitbucket_workspace.testacc.id
-                  project_key = bitbucket_project.testacc.key
-				  name        = "%s"
-				}
-
-				resource "bitbucket_webhook" "testacc" {
-				  workspace   = data.bitbucket_workspace.testacc.id
-				  repository  = bitbucket_repository.testacc.name
-				  description = "%s"
-				  url         = "%s"
-				  events      = ["pullrequest:approved", "pullrequest:unapproved"]
-				  is_active   = true
-				}
-
-				data "bitbucket_webhook" "testacc" {
-				  id         = bitbucket_webhook.testacc.id
-				  workspace  = data.bitbucket_workspace.testacc.id
-				  repository = bitbucket_repository.testacc.name
-				}`, workspaceSlug, projectName, projectKey, repoName, webhookDescription, webhookUrl),
+					data "bitbucket_workspace" "testacc" {
+						id = "%s"
+					}
+	
+					resource "bitbucket_project" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  name       = "%s"
+					  key        = "%s"
+					  is_private = true
+					}
+	
+					resource "bitbucket_repository" "testacc" {
+					  workspace   = data.bitbucket_workspace.testacc.id
+					  project_key = bitbucket_project.testacc.key
+					  name        = "%s"
+					}
+	
+					resource "bitbucket_webhook" "testacc" {
+					  workspace   = data.bitbucket_workspace.testacc.id
+					  repository  = bitbucket_repository.testacc.name
+					  description = "%s"
+					  url         = "%s"
+					  events      = ["pullrequest:approved", "pullrequest:unapproved"]
+					  is_active   = true
+					}
+	
+					data "bitbucket_webhook" "testacc" {
+					  id         = bitbucket_webhook.testacc.id
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  repository = bitbucket_repository.testacc.name
+					}`, workspaceSlug, projectName, projectKey, repoName, webhookDescription, webhookUrl),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.bitbucket_webhook.testacc", "workspace", workspaceSlug),
 					resource.TestCheckResourceAttr("data.bitbucket_webhook.testacc", "repository", repoName),
