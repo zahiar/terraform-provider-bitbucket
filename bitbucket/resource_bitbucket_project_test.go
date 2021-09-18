@@ -1,0 +1,67 @@
+package bitbucket
+
+import (
+	"fmt"
+	"os"
+	"strings"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+)
+
+func TestAccBitbucketProjectResource_basic(t *testing.T) {
+	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	projectName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
+	projectKey := strings.ToUpper(acctest.RandStringFromCharSet(3, acctest.CharSetAlpha))
+	projectDescription := "TF ACC Test Project"
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviders,
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(`
+					data "bitbucket_workspace" "testacc" {
+						id = "%s"
+					}
+
+					resource "bitbucket_project" "testacc" {
+					  workspace = data.bitbucket_workspace.testacc.id
+					  name      = "%s"
+					  key       = "%s"
+					}`, workspaceSlug, projectName, projectKey),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("bitbucket_project.testacc", "workspace", workspaceSlug),
+					resource.TestCheckResourceAttr("bitbucket_project.testacc", "key", projectKey),
+					resource.TestCheckResourceAttr("bitbucket_project.testacc", "name", projectName),
+					resource.TestCheckResourceAttr("bitbucket_project.testacc", "description", ""),
+					resource.TestCheckResourceAttr("bitbucket_project.testacc", "is_private", "true"),
+					resource.TestCheckResourceAttrSet("bitbucket_project.testacc", "id"),
+				),
+			},
+			{
+				Config: fmt.Sprintf(`
+					data "bitbucket_workspace" "testacc" {
+						id = "%s"
+					}
+
+					resource "bitbucket_project" "testacc" {
+					  workspace   = data.bitbucket_workspace.testacc.id
+					  name        = "%s"
+					  key         = "%s"
+					  description = "%s"
+					  is_private  = false
+					}`, workspaceSlug, projectName, projectKey, projectDescription),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("bitbucket_project.testacc", "workspace", workspaceSlug),
+					resource.TestCheckResourceAttr("bitbucket_project.testacc", "key", projectKey),
+					resource.TestCheckResourceAttr("bitbucket_project.testacc", "name", projectName),
+					resource.TestCheckResourceAttr("bitbucket_project.testacc", "description", projectDescription),
+					resource.TestCheckResourceAttr("bitbucket_project.testacc", "is_private", "false"),
+					resource.TestCheckResourceAttrSet("bitbucket_project.testacc", "id"),
+				),
+			},
+		},
+	})
+}
