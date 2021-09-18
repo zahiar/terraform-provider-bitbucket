@@ -15,7 +15,7 @@ func TestAccBitbucketWebhookDataSource_basic(t *testing.T) {
 	projectName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	projectKey := strings.ToUpper(acctest.RandStringFromCharSet(3, acctest.CharSetAlpha))
 	repoName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
-	webhookDescription := "TF ACC Test Webhook"
+	webhookName := "TF ACC Test Webhook"
 	webhookUrl := "https://example.com"
 
 	resource.Test(t, resource.TestCase{
@@ -42,23 +42,23 @@ func TestAccBitbucketWebhookDataSource_basic(t *testing.T) {
 					}
 	
 					resource "bitbucket_webhook" "testacc" {
-					  workspace   = data.bitbucket_workspace.testacc.id
-					  repository  = bitbucket_repository.testacc.name
-					  description = "%s"
-					  url         = "%s"
-					  events      = ["pullrequest:approved", "pullrequest:unapproved"]
-					  is_active   = true
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  repository = bitbucket_repository.testacc.name
+					  name       = "%s"
+					  url        = "%s"
+					  events     = ["pullrequest:approved", "pullrequest:unapproved"]
+					  is_active  = true
 					}
 	
 					data "bitbucket_webhook" "testacc" {
 					  id         = bitbucket_webhook.testacc.id
 					  workspace  = data.bitbucket_workspace.testacc.id
 					  repository = bitbucket_repository.testacc.name
-					}`, workspaceSlug, projectName, projectKey, repoName, webhookDescription, webhookUrl),
+					}`, workspaceSlug, projectName, projectKey, repoName, webhookName, webhookUrl),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.bitbucket_webhook.testacc", "workspace", workspaceSlug),
 					resource.TestCheckResourceAttr("data.bitbucket_webhook.testacc", "repository", repoName),
-					resource.TestCheckResourceAttr("data.bitbucket_webhook.testacc", "description", webhookDescription),
+					resource.TestCheckResourceAttr("data.bitbucket_webhook.testacc", "name", webhookName),
 					resource.TestCheckResourceAttr("data.bitbucket_webhook.testacc", "url", webhookUrl),
 					resource.TestCheckResourceAttr("data.bitbucket_webhook.testacc", "is_active", "true"),
 

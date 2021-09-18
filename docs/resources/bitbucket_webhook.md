@@ -4,22 +4,22 @@ Manage a webhook for a repository within BitBucket.
 ## Example Usage
 ```hcl
 resource "bitbucket_webhook" "example" {
-  workspace   = "workspace-slug"
-  repository  = "example-repo"
-  description = "Example webhook"
-  url         = "https://example.webook"
-  events      = ["pullrequest:approved", "pullrequest:comment_updated"]
-  is_active   = true
+  workspace  = "workspace-slug"
+  repository = "example-repo"
+  name       = "Example webhook"
+  url        = "https://example.webook"
+  events     = ["pullrequest:approved", "pullrequest:comment_updated"]
+  is_active  = true
 }
 ```
 ```hcl
 resource "bitbucket_webhook" "example" {
-  workspace   = "{workspace-uuid}"
-  repository  = "example-repo"
-  description = "Example webhook"
-  url         = "https://example.webook"
-  events      = ["pullrequest:approved", "pullrequest:comment_updated"]
-  is_active   = true
+  workspace  = "{workspace-uuid}"
+  repository = "example-repo"
+  name       = "Example webhook"
+  url        = "https://example.webook"
+  events     = ["pullrequest:approved", "pullrequest:comment_updated"]
+  is_active  = true
 }
 ```
 
@@ -27,9 +27,9 @@ resource "bitbucket_webhook" "example" {
 The following arguments are supported:
 * `workspace` - (Required) The slug or UUID (including the enclosing `{}`) of the workspace this webhook belongs to.
 * `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).
-* `description` - (Optional) The description of the webhook. Defaults to empty string.
-* `url` - (Optional) The url to configure the webhook with. Defaults to empty string.
-* `events` - (Optional) A list of events that will trigger the webhook - see list below. Defaults to empty array.
+* `name` - (Required) The name of the webhook.
+* `url` - (Required) The url to configure the webhook with.
+* `events` - (Required) A list of events that will trigger the webhook - see list below.
 * `is_active` - (Optional) A boolean to state if the webhook is active or not. Defaults to `false`.
 
 
