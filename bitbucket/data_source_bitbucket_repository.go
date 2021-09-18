@@ -7,9 +7,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func dataSourceBitBucketRepository() *schema.Resource {
+func dataSourceBitbucketRepository() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceBitBucketRepositoryRead,
+		ReadContext: dataSourceBitbucketRepositoryRead,
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Description: "The UUID of the repository.",
@@ -51,6 +51,6 @@ func dataSourceBitBucketRepository() *schema.Resource {
 	}
 }
 
-func dataSourceBitBucketRepositoryRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	return resourceBitBucketRepositoryRead(ctx, resourceData, meta)
+func dataSourceBitbucketRepositoryRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return resourceBitbucketRepositoryRead(ctx, resourceData, meta)
 }

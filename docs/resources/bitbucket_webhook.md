@@ -1,5 +1,5 @@
 # Resource: bitbucket_webhook
-Manage a webhook for a repository within BitBucket.
+Manage a webhook for a repository within Bitbucket.
 
 ## Example Usage
 ```hcl
@@ -68,7 +68,7 @@ In addition to the arguments above, the following additional attributes are expo
 * `id` - The UUID of the webhook.
 
 ## Import
-BitBucket webhook's can be imported with a combination of its workspace slug/UUID, repository name & webhook UUID.
+Bitbucket webhook's can be imported with a combination of its workspace slug/UUID, repository name & webhook UUID.
 
 ### Example using workspace slug, repository name & webhook UUID
 ```sh

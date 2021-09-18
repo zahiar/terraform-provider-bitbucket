@@ -1,5 +1,5 @@
 # Resource: bitbucket_project
-Manage a project within BitBucket.
+Manage a project within Bitbucket.
 
 ## Example Usage
 ```hcl
@@ -34,7 +34,7 @@ In addition to the arguments above, the following additional attributes are expo
 * `id` - The UUID of the project.
 
 ## Import
-BitBucket project can be imported with a combination of its workspace slug/UUID & key.
+Bitbucket project can be imported with a combination of its workspace slug/UUID & key.
 
 ### Example using workspace slug & project key
 ```sh

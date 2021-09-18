@@ -1,7 +1,7 @@
-# BitBucket Terraform Provider
-The BitBucket Terraform provider is used to interact with the BitBucket API.
+# Bitbucket Terraform Provider
+The Bitbucket Terraform provider is used to interact with the Bitbucket API.
 
-In terms of authentication, you must use your BitBucket username (not your email address) & either your password, or
+In terms of authentication, you must use your Bitbucket username (not your email address) & either your password, or
 if you have two-factor authentication enabled, then you must use an app password.
 Go here for more info on app passwords: https://support.atlassian.com/bitbucket-cloud/docs/app-passwords/
 

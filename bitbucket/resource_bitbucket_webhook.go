@@ -13,14 +13,14 @@ import (
 	gobb "github.com/ktrysmt/go-bitbucket"
 )
 
-func resourceBitBucketWebhook() *schema.Resource {
+func resourceBitbucketWebhook() *schema.Resource {
 	return &schema.Resource{
-		CreateContext: resourceBitBucketWebhookCreate,
-		ReadContext:   resourceBitBucketWebhookRead,
-		UpdateContext: resourceBitBucketWebhookUpdate,
-		DeleteContext: resourceBitBucketWebhookDelete,
+		CreateContext: resourceBitbucketWebhookCreate,
+		ReadContext:   resourceBitbucketWebhookRead,
+		UpdateContext: resourceBitbucketWebhookUpdate,
+		DeleteContext: resourceBitbucketWebhookDelete,
 		Importer: &schema.ResourceImporter{
-			StateContext: resourceBitBucketWebhookImport,
+			StateContext: resourceBitbucketWebhookImport,
 		},
 		Schema: map[string]*schema.Schema{
 			"id": {
@@ -69,7 +69,7 @@ func resourceBitBucketWebhook() *schema.Resource {
 	}
 }
 
-func resourceBitBucketWebhookCreate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceBitbucketWebhookCreate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*gobb.Client)
 
 	webhookResponse, err := client.Repositories.Webhooks.Create(
@@ -93,10 +93,10 @@ func resourceBitBucketWebhookCreate(ctx context.Context, resourceData *schema.Re
 
 	resourceData.SetId(webhook.Uuid)
 
-	return resourceBitBucketWebhookRead(ctx, resourceData, meta)
+	return resourceBitbucketWebhookRead(ctx, resourceData, meta)
 }
 
-func resourceBitBucketWebhookRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceBitbucketWebhookRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*gobb.Client)
 
 	webhookResponse, err := client.Repositories.Webhooks.Get(
@@ -124,7 +124,7 @@ func resourceBitBucketWebhookRead(ctx context.Context, resourceData *schema.Reso
 	return nil
 }
 
-func resourceBitBucketWebhookUpdate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceBitbucketWebhookUpdate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*gobb.Client)
 
 	_, err := client.Repositories.Webhooks.Update(
@@ -142,10 +142,10 @@ func resourceBitBucketWebhookUpdate(ctx context.Context, resourceData *schema.Re
 		return diag.FromErr(fmt.Errorf("unable to update webhook with error: %s", err))
 	}
 
-	return resourceBitBucketWebhookRead(ctx, resourceData, meta)
+	return resourceBitbucketWebhookRead(ctx, resourceData, meta)
 }
 
-func resourceBitBucketWebhookDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceBitbucketWebhookDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*gobb.Client)
 
 	_, err := client.Repositories.Webhooks.Delete(
@@ -164,7 +164,7 @@ func resourceBitBucketWebhookDelete(ctx context.Context, resourceData *schema.Re
 	return nil
 }
 
-func resourceBitBucketWebhookImport(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+func resourceBitbucketWebhookImport(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
 	ret := []*schema.ResourceData{resourceData}
 
 	splitID := strings.Split(resourceData.Id(), "/")
@@ -176,7 +176,7 @@ func resourceBitBucketWebhookImport(ctx context.Context, resourceData *schema.Re
 	_ = resourceData.Set("repository", splitID[1])
 	resourceData.SetId(splitID[2])
 
-	_ = resourceBitBucketWebhookRead(ctx, resourceData, meta)
+	_ = resourceBitbucketWebhookRead(ctx, resourceData, meta)
 
 	return ret, nil
 }

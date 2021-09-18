@@ -10,12 +10,12 @@ import (
 	gobb "github.com/ktrysmt/go-bitbucket"
 )
 
-func dataSourceBitBucketWorkspace() *schema.Resource {
+func dataSourceBitbucketWorkspace() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceBitBucketWorkspaceRead,
+		ReadContext: dataSourceBitbucketWorkspaceRead,
 		Schema: map[string]*schema.Schema{
 			"id": {
-        Description: "The slug of the workspace.",
+				Description: "The slug of the workspace.",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
@@ -43,7 +43,7 @@ func dataSourceBitBucketWorkspace() *schema.Resource {
 	}
 }
 
-func dataSourceBitBucketWorkspaceRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func dataSourceBitbucketWorkspaceRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*gobb.Client)
 
 	workspace, err := client.Workspaces.Get(resourceData.Get("id").(string))
