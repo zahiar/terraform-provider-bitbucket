@@ -26,17 +26,19 @@ func Provider() *schema.Provider {
 		},
 
 		DataSourcesMap: map[string]*schema.Resource{
-			"bitbucket_project":    dataSourceBitbucketProject(),
-			"bitbucket_repository": dataSourceBitbucketRepository(),
-			"bitbucket_user":       dataSourceBitbucketUser(),
-			"bitbucket_webhook":    dataSourceBitbucketWebhook(),
-			"bitbucket_workspace":  dataSourceBitbucketWorkspace(),
+			"bitbucket_default_reviewer": dataSourceBitbucketDefaultReviewer(),
+			"bitbucket_project":          dataSourceBitbucketProject(),
+			"bitbucket_repository":       dataSourceBitbucketRepository(),
+			"bitbucket_user":             dataSourceBitbucketUser(),
+			"bitbucket_webhook":          dataSourceBitbucketWebhook(),
+			"bitbucket_workspace":        dataSourceBitbucketWorkspace(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			"bitbucket_project":    resourceBitbucketProject(),
-			"bitbucket_repository": resourceBitbucketRepository(),
-			"bitbucket_webhook":    resourceBitbucketWebhook(),
+			"bitbucket_default_reviewer": resourceBitbucketDefaultReviewer(),
+			"bitbucket_project":          resourceBitbucketProject(),
+			"bitbucket_repository":       resourceBitbucketRepository(),
+			"bitbucket_webhook":          resourceBitbucketWebhook(),
 		},
 
 		ConfigureContextFunc: configureProvider,
