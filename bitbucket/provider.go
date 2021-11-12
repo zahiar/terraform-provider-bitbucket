@@ -27,6 +27,7 @@ func Provider() *schema.Provider {
 
 		DataSourcesMap: map[string]*schema.Resource{
 			"bitbucket_default_reviewer": dataSourceBitbucketDefaultReviewer(),
+			"bitbucket_deploy_key":       dataSourceBitbucketDeployKey(),
 			"bitbucket_project":          dataSourceBitbucketProject(),
 			"bitbucket_repository":       dataSourceBitbucketRepository(),
 			"bitbucket_user":             dataSourceBitbucketUser(),
@@ -36,6 +37,7 @@ func Provider() *schema.Provider {
 
 		ResourcesMap: map[string]*schema.Resource{
 			"bitbucket_default_reviewer": resourceBitbucketDefaultReviewer(),
+			"bitbucket_deploy_key":       resourceBitbucketDeployKey(),
 			"bitbucket_project":          resourceBitbucketProject(),
 			"bitbucket_repository":       resourceBitbucketRepository(),
 			"bitbucket_webhook":          resourceBitbucketWebhook(),
