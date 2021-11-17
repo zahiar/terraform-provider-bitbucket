@@ -91,7 +91,13 @@ func resourceBitbucketDeployKeyRead(ctx context.Context, resourceData *schema.Re
 	}
 
 	_ = resourceData.Set("label", deployKey.Label)
-	_ = resourceData.Set("key", deployKey.Key)
+
+	if deployKey.Comment != "" {
+		_ = resourceData.Set("key", fmt.Sprintf("%s %s", deployKey.Key, deployKey.Comment))
+	} else {
+		_ = resourceData.Set("key", deployKey.Key)
+	}
+
 	resourceData.SetId(strconv.Itoa(deployKey.Id))
 
 	return nil
@@ -129,7 +135,7 @@ func resourceBitbucketDeployKeyImport(ctx context.Context, resourceData *schema.
 	_ = resourceData.Set("repository", splitID[1])
 	resourceData.SetId(splitID[2])
 
-	_ = resourceBitbucketWebhookRead(ctx, resourceData, meta)
+	_ = resourceBitbucketDeployKeyRead(ctx, resourceData, meta)
 
 	return ret, nil
 }
