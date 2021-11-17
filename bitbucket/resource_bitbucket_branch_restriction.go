@@ -230,7 +230,7 @@ func parseBranchRestrictionUserFields(users []interface{}) []string {
 }
 
 func parseBranchRestrictionUserGroupFields(groups []interface{}) map[string]string {
-	var groupsMap map[string]string
+	groupsMap := make(map[string]string)
 	for _, group := range groups {
 		group := group.(string)
 		groupsMap[group] = group

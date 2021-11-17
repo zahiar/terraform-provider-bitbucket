@@ -7,6 +7,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	gobb "github.com/ktrysmt/go-bitbucket"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAccBitbucketUserDataSource_basic(t *testing.T) {
@@ -49,4 +50,34 @@ func getCurrentUser() (*gobb.User, error) {
 			AccountStatus: "",
 		}, nil
 	}
+}
+
+func TestDecodeUserResponseSuccess(t *testing.T) {
+	resp := map[string]interface{}{
+		"uuid":           "example-uuid",
+		"display_name":   "example-display-name",
+		"nickname":       "example-nickname",
+		"account_id":     "example-account-id",
+		"account_status": "example-account-status",
+	}
+
+	user, _ := decodeUserResponse(resp)
+
+	expectedUser := &User{
+		Uuid:          "example-uuid",
+		DisplayName:   "example-display-name",
+		Nickname:      "example-nickname",
+		AccountId:     "example-account-id",
+		AccountStatus: "example-account-status",
+	}
+	assert.Equal(t, expectedUser, user)
+}
+
+func TestDecodeUserResponseError(t *testing.T) {
+	resp := map[string]interface{}{
+		"type": "error",
+	}
+
+	_, err := decodeUserResponse(resp)
+	assert.EqualError(t, err, "unable able to decode user API response")
 }

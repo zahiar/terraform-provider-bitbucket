@@ -9,6 +9,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAccBitbucketBranchRestrictionResource_basic(t *testing.T) {
@@ -229,4 +230,24 @@ func TestAccBitbucketBranchRestrictionResource_withEmptyUsersAndEmptyGroups(t *t
 			},
 		},
 	})
+}
+
+func TestParseBranchRestrictionUserFields(t *testing.T) {
+	users := []interface{}{"user-a", "user-b", "user-c"}
+	usersStrArr := parseBranchRestrictionUserFields(users)
+
+	expected := []string{"user-a", "user-b", "user-c"}
+	assert.Equal(t, expected, usersStrArr)
+}
+
+func TestParseBranchRestrictionGroupFields(t *testing.T) {
+	groups := []interface{}{"group-a", "group-b", "group-c"}
+	usersStrArr := parseBranchRestrictionUserGroupFields(groups)
+
+	expected := map[string]string{
+		"group-a": "group-a",
+		"group-b": "group-b",
+		"group-c": "group-c",
+	}
+	assert.Equal(t, expected, usersStrArr)
 }

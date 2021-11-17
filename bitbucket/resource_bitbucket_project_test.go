@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAccBitbucketProjectResource_basic(t *testing.T) {
@@ -64,4 +65,14 @@ func TestAccBitbucketProjectResource_basic(t *testing.T) {
 			},
 		},
 	})
+}
+
+func TestValidateProjectKey(t *testing.T) {
+	invalidKey := "123-invalid-!@£"
+	validator := validateProjectKey(invalidKey, nil)
+	assert.True(t, validator.HasError())
+
+	validKey := "SOME_123_PROJECT"
+	validator = validateProjectKey(validKey, nil)
+	assert.False(t, validator.HasError())
 }
