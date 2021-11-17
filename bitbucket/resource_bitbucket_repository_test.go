@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAccBitbucketRepositoryResource_basic(t *testing.T) {
@@ -80,4 +81,14 @@ func TestAccBitbucketRepositoryResource_basic(t *testing.T) {
 			},
 		},
 	})
+}
+
+func TestValidateRepositoryName(t *testing.T) {
+	invalidName := "ABC!@£"
+	validator := validateRepositoryName(invalidName, nil)
+	assert.True(t, validator.HasError())
+
+	validName := "abc-def"
+	validator = validateRepositoryName(validName, nil)
+	assert.False(t, validator.HasError())
 }

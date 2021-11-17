@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAccBitbucketWebhookResource_basic(t *testing.T) {
@@ -102,4 +103,12 @@ func TestAccBitbucketWebhookResource_basic(t *testing.T) {
 			},
 		},
 	})
+}
+
+func TestConvertEventsToStringArray(t *testing.T) {
+	events := []interface{}{"a", "b", "c"}
+	eventsStrArr := convertEventsToStringArray(events)
+
+	expected := []string{"a", "b", "c"}
+	assert.Equal(t, expected, eventsStrArr)
 }

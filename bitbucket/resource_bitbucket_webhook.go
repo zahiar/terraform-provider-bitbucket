@@ -2,8 +2,6 @@ package bitbucket
 
 import (
 	"context"
-	"encoding/json"
-	"errors"
 	"fmt"
 	"strings"
 
@@ -72,7 +70,7 @@ func resourceBitbucketWebhook() *schema.Resource {
 func resourceBitbucketWebhookCreate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*gobb.Client)
 
-	webhookResponse, err := client.Repositories.Webhooks.Create(
+	webhook, err := client.Repositories.Webhooks.Create(
 		&gobb.WebhooksOptions{
 			Owner:       resourceData.Get("workspace").(string),
 			RepoSlug:    resourceData.Get("repository").(string),
@@ -86,11 +84,6 @@ func resourceBitbucketWebhookCreate(ctx context.Context, resourceData *schema.Re
 		return diag.FromErr(fmt.Errorf("unable to create webhook with error: %s", err))
 	}
 
-	webhook, err := decodeWebhookResponse(webhookResponse)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("unable to decode webhook response with error: %s", err))
-	}
-
 	resourceData.SetId(webhook.Uuid)
 
 	return resourceBitbucketWebhookRead(ctx, resourceData, meta)
@@ -99,7 +92,7 @@ func resourceBitbucketWebhookCreate(ctx context.Context, resourceData *schema.Re
 func resourceBitbucketWebhookRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*gobb.Client)
 
-	webhookResponse, err := client.Repositories.Webhooks.Get(
+	webhook, err := client.Repositories.Webhooks.Get(
 		&gobb.WebhooksOptions{
 			Owner:    resourceData.Get("workspace").(string),
 			RepoSlug: resourceData.Get("repository").(string),
@@ -108,11 +101,6 @@ func resourceBitbucketWebhookRead(ctx context.Context, resourceData *schema.Reso
 	)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to get webhook with error: %s", err))
-	}
-
-	webhook, err := decodeWebhookResponse(webhookResponse)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("unable to decode webhook response with error: %s", err))
 	}
 
 	_ = resourceData.Set("name", webhook.Description)
@@ -179,24 +167,6 @@ func resourceBitbucketWebhookImport(ctx context.Context, resourceData *schema.Re
 	_ = resourceBitbucketWebhookRead(ctx, resourceData, meta)
 
 	return ret, nil
-}
-
-func decodeWebhookResponse(response interface{}) (*gobb.WebhooksOptions, error) {
-	webhookMap := response.(map[string]interface{})
-
-	if webhookMap["type"] == "error" {
-		return nil, errors.New("unable able to decode webhook API response")
-	}
-
-	webHookOptions := &gobb.WebhooksOptions{}
-	jsonString, err := json.Marshal(webhookMap)
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(jsonString, &webHookOptions)
-
-	return webHookOptions, err
 }
 
 func convertEventsToStringArray(events []interface{}) []string {
