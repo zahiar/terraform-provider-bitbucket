@@ -31,6 +31,7 @@ are more than welcome to submit a pull request or raise a ticket if you'd prefer
 ### Requirements
 If you do wish to help develop this, you will need the following installed:
 * [Go](http://www.golang.org) (see `go.mod` file for the correct version to install)
+* [Go Linter](https://formulae.brew.sh/formula/golangci-lint)
 * [GOPATH](http://golang.org/doc/code.html#GOPATH) (is correctly setup)
 * [Terraform](https://www.terraform.io/downloads.html) (0.14+)
 

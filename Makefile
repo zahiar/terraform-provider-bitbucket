@@ -15,6 +15,9 @@ build:
 	@echo ""
 	@echo "This should only be used during development. See https://www.terraform.io/docs/commands/cli-config.html#development-overrides-for-provider-developers for details."
 
+lint:
+	golangci-lint run
+
 test:
 	go test -v -cover ./...
 
