@@ -6,8 +6,6 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-
-	gobb "github.com/ktrysmt/go-bitbucket"
 )
 
 func dataSourceBitbucketWorkspace() *schema.Resource {
@@ -44,7 +42,7 @@ func dataSourceBitbucketWorkspace() *schema.Resource {
 }
 
 func dataSourceBitbucketWorkspaceRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	workspace, err := client.Workspaces.Get(resourceData.Get("id").(string))
 	if err != nil {

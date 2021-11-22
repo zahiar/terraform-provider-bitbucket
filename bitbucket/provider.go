@@ -6,6 +6,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	gobb "github.com/ktrysmt/go-bitbucket"
+
+	v1 "github.com/zahiar/terraform-provider-bitbucket/bitbucket/api/v1"
 )
 
 func Provider() *schema.Provider {
@@ -29,6 +31,7 @@ func Provider() *schema.Provider {
 			"bitbucket_branch_restriction": dataSourceBitbucketBranchRestriction(),
 			"bitbucket_default_reviewer":   dataSourceBitbucketDefaultReviewer(),
 			"bitbucket_deploy_key":         dataSourceBitbucketDeployKey(),
+			"bitbucket_group":              dataSourceBitbucketGroup(),
 			"bitbucket_project":            dataSourceBitbucketProject(),
 			"bitbucket_repository":         dataSourceBitbucketRepository(),
 			"bitbucket_user":               dataSourceBitbucketUser(),
@@ -40,6 +43,7 @@ func Provider() *schema.Provider {
 			"bitbucket_branch_restriction": resourceBitbucketBranchRestriction(),
 			"bitbucket_default_reviewer":   resourceBitbucketDefaultReviewer(),
 			"bitbucket_deploy_key":         resourceBitbucketDeployKey(),
+			"bitbucket_group":              resourceBitbucketGroup(),
 			"bitbucket_project":            resourceBitbucketProject(),
 			"bitbucket_repository":         resourceBitbucketRepository(),
 			"bitbucket_webhook":            resourceBitbucketWebhook(),
@@ -49,11 +53,28 @@ func Provider() *schema.Provider {
 	}
 }
 
+type Clients struct {
+	V1 *v1.Client
+	V2 *gobb.Client
+}
+
 func configureProvider(ctx context.Context, resourceData *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	client := gobb.NewBasicAuth(
 		resourceData.Get("username").(string),
 		resourceData.Get("password").(string),
 	)
 
-	return client, nil
+	v1Client := v1.NewClient(
+		&v1.Auth{
+			Username: resourceData.Get("username").(string),
+			Password: resourceData.Get("password").(string),
+		},
+	)
+
+	clients := &Clients{
+		V1: v1Client,
+		V2: client,
+	}
+
+	return clients, nil
 }

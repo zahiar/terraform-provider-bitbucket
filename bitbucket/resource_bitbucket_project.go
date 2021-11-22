@@ -61,7 +61,7 @@ func resourceBitbucketProject() *schema.Resource {
 }
 
 func resourceBitbucketProjectCreate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	project, err := client.Workspaces.CreateProject(
 		&gobb.ProjectOptions{
@@ -82,7 +82,7 @@ func resourceBitbucketProjectCreate(ctx context.Context, resourceData *schema.Re
 }
 
 func resourceBitbucketProjectRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	project, err := client.Workspaces.GetProject(
 		&gobb.ProjectOptions{
@@ -105,7 +105,7 @@ func resourceBitbucketProjectRead(ctx context.Context, resourceData *schema.Reso
 }
 
 func resourceBitbucketProjectUpdate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	_, err := client.Workspaces.UpdateProject(
 		&gobb.ProjectOptions{
@@ -125,7 +125,7 @@ func resourceBitbucketProjectUpdate(ctx context.Context, resourceData *schema.Re
 }
 
 func resourceBitbucketProjectDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	_, err := client.Workspaces.DeleteProject(
 		&gobb.ProjectOptions{

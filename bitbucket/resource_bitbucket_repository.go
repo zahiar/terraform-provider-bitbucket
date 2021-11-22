@@ -73,7 +73,7 @@ func resourceBitbucketRepository() *schema.Resource {
 }
 
 func resourceBitbucketRepositoryCreate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	repository, err := client.Repositories.Repository.Create(
 		&gobb.RepositoryOptions{
@@ -95,7 +95,7 @@ func resourceBitbucketRepositoryCreate(ctx context.Context, resourceData *schema
 }
 
 func resourceBitbucketRepositoryRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	repository, err := client.Repositories.Repository.Get(
 		&gobb.RepositoryOptions{
@@ -118,7 +118,7 @@ func resourceBitbucketRepositoryRead(ctx context.Context, resourceData *schema.R
 }
 
 func resourceBitbucketRepositoryUpdate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	_, err := client.Repositories.Repository.Update(
 		&gobb.RepositoryOptions{
@@ -139,7 +139,7 @@ func resourceBitbucketRepositoryUpdate(ctx context.Context, resourceData *schema
 }
 
 func resourceBitbucketRepositoryDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	_, err := client.Repositories.Repository.Delete(
 		&gobb.RepositoryOptions{
