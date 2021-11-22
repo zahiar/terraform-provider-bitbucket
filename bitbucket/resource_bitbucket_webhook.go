@@ -68,7 +68,7 @@ func resourceBitbucketWebhook() *schema.Resource {
 }
 
 func resourceBitbucketWebhookCreate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	webhook, err := client.Repositories.Webhooks.Create(
 		&gobb.WebhooksOptions{
@@ -90,7 +90,7 @@ func resourceBitbucketWebhookCreate(ctx context.Context, resourceData *schema.Re
 }
 
 func resourceBitbucketWebhookRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	webhook, err := client.Repositories.Webhooks.Get(
 		&gobb.WebhooksOptions{
@@ -113,7 +113,7 @@ func resourceBitbucketWebhookRead(ctx context.Context, resourceData *schema.Reso
 }
 
 func resourceBitbucketWebhookUpdate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	_, err := client.Repositories.Webhooks.Update(
 		&gobb.WebhooksOptions{
@@ -134,7 +134,7 @@ func resourceBitbucketWebhookUpdate(ctx context.Context, resourceData *schema.Re
 }
 
 func resourceBitbucketWebhookDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	_, err := client.Repositories.Webhooks.Delete(
 		&gobb.WebhooksOptions{

@@ -93,7 +93,7 @@ func resourceBitbucketBranchRestriction() *schema.Resource {
 }
 
 func resourceBitbucketBranchRestrictionCreate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	opts := &gobb.BranchRestrictionsOptions{
 		Owner:    resourceData.Get("workspace").(string),
@@ -128,7 +128,7 @@ func resourceBitbucketBranchRestrictionCreate(ctx context.Context, resourceData 
 }
 
 func resourceBitbucketBranchRestrictionRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	branchRestriction, err := client.Repositories.BranchRestrictions.Get(
 		&gobb.BranchRestrictionsOptions{
@@ -151,7 +151,7 @@ func resourceBitbucketBranchRestrictionRead(ctx context.Context, resourceData *s
 }
 
 func resourceBitbucketBranchRestrictionUpdate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	opts := &gobb.BranchRestrictionsOptions{
 		Owner:    resourceData.Get("workspace").(string),
@@ -185,7 +185,7 @@ func resourceBitbucketBranchRestrictionUpdate(ctx context.Context, resourceData 
 }
 
 func resourceBitbucketBranchRestrictionDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	_, err := client.Repositories.BranchRestrictions.Delete(
 		&gobb.BranchRestrictionsOptions{

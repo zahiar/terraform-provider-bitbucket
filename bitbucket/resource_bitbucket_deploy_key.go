@@ -56,7 +56,7 @@ func resourceBitbucketDeployKey() *schema.Resource {
 }
 
 func resourceBitbucketDeployKeyCreate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	deployKey, err := client.Repositories.DeployKeys.Create(
 		&gobb.DeployKeyOptions{
@@ -76,7 +76,7 @@ func resourceBitbucketDeployKeyCreate(ctx context.Context, resourceData *schema.
 }
 
 func resourceBitbucketDeployKeyRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	deployKeyId, _ := strconv.Atoi(resourceData.Get("id").(string))
 	deployKey, err := client.Repositories.DeployKeys.Get(
@@ -104,7 +104,7 @@ func resourceBitbucketDeployKeyRead(ctx context.Context, resourceData *schema.Re
 }
 
 func resourceBitbucketDeployKeyDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	deployKeyId, _ := strconv.Atoi(resourceData.Id())
 	_, err := client.Repositories.DeployKeys.Delete(

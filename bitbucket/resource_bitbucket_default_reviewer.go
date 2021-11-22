@@ -48,7 +48,7 @@ func resourceBitbucketDefaultReviewer() *schema.Resource {
 }
 
 func resourceBitbucketDefaultReviewerCreate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	workspace := resourceData.Get("workspace").(string)
 	repository := resourceData.Get("repository").(string)
@@ -71,7 +71,7 @@ func resourceBitbucketDefaultReviewerCreate(ctx context.Context, resourceData *s
 }
 
 func resourceBitbucketDefaultReviewerRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	workspace := resourceData.Get("workspace").(string)
 	repository := resourceData.Get("repository").(string)
@@ -101,7 +101,7 @@ func resourceBitbucketDefaultReviewerRead(ctx context.Context, resourceData *sch
 }
 
 func resourceBitbucketDefaultReviewerDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	workspace := resourceData.Get("workspace").(string)
 	repository := resourceData.Get("repository").(string)
@@ -139,7 +139,7 @@ func resourceBitbucketDefaultReviewerImport(ctx context.Context, resourceData *s
 	_ = resourceData.Set("repository", repository)
 	_ = resourceData.Set("user", user)
 
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 	_, err := client.Repositories.Repository.GetDefaultReviewer(
 		&gobb.RepositoryDefaultReviewerOptions{
 			Owner:    workspace,

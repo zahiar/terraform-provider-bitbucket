@@ -38,7 +38,7 @@ func dataSourceBitbucketDefaultReviewer() *schema.Resource {
 }
 
 func dataSourceBitbucketDefaultReviewerRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*gobb.Client)
+	client := meta.(*Clients).V2
 
 	workspace := resourceData.Get("workspace").(string)
 	repository := resourceData.Get("repository").(string)
