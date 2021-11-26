@@ -177,6 +177,151 @@ func TestAccBitbucketBranchRestrictionResource_withUsers(t *testing.T) {
 	})
 }
 
+func TestAccBitbucketBranchRestrictionResource_withGroups(t *testing.T) {
+	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	projectName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
+	projectKey := strings.ToUpper(acctest.RandStringFromCharSet(3, acctest.CharSetAlpha))
+	repoName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
+	groupName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
+	branchRestrictionPattern := "master"
+	branchRestrictionKind := "push"
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviders,
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(`
+					data "bitbucket_workspace" "testacc" {
+						id = "%s"
+					}
+
+					resource "bitbucket_project" "testacc" {
+					  workspace = data.bitbucket_workspace.testacc.id
+					  name      = "%s"
+					  key       = "%s"
+					}
+
+					resource "bitbucket_repository" "testacc" {
+					  workspace   = data.bitbucket_workspace.testacc.id
+					  project_key = bitbucket_project.testacc.key
+					  name        = "%s"
+					}
+
+					resource "bitbucket_group" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  name       = "%s"
+                      permission = "write"
+					}
+
+					resource "bitbucket_group_permission" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.uuid
+					  repository = bitbucket_repository.testacc.name
+					  group      = bitbucket_group.testacc.name
+                      permission = "write"
+					}
+
+					resource "bitbucket_branch_restriction" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  repository = bitbucket_repository.testacc.name
+					  pattern    = "%s"
+					  kind       = "%s"
+					  groups     = [bitbucket_group.testacc.slug]
+                      depends_on = [bitbucket_group_permission.testacc]
+					}`, workspaceSlug, projectName, projectKey, repoName, groupName, branchRestrictionPattern, branchRestrictionKind),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "workspace", workspaceSlug),
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "repository", repoName),
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "pattern", branchRestrictionPattern),
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "kind", branchRestrictionKind),
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "value", "0"),
+
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "groups.#", "1"),
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "groups.0", groupName),
+
+					resource.TestCheckNoResourceAttr("bitbucket_branch_restriction.testacc", "users"),
+
+					resource.TestCheckResourceAttrSet("bitbucket_branch_restriction.testacc", "id"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccBitbucketBranchRestrictionResource_withUsersAndGroups(t *testing.T) {
+	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	projectName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
+	projectKey := strings.ToUpper(acctest.RandStringFromCharSet(3, acctest.CharSetAlpha))
+	repoName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
+	groupName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
+	branchRestrictionPattern := "master"
+	branchRestrictionKind := "push"
+	branchRestrictionUser := os.Getenv("BITBUCKET_USERNAME")
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviders,
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(`
+					data "bitbucket_workspace" "testacc" {
+						id = "%s"
+					}
+
+					resource "bitbucket_project" "testacc" {
+					  workspace = data.bitbucket_workspace.testacc.id
+					  name      = "%s"
+					  key       = "%s"
+					}
+
+					resource "bitbucket_repository" "testacc" {
+					  workspace   = data.bitbucket_workspace.testacc.id
+					  project_key = bitbucket_project.testacc.key
+					  name        = "%s"
+					}
+
+					resource "bitbucket_group" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  name       = "%s"
+                      permission = "write"
+					}
+
+					resource "bitbucket_group_permission" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.uuid
+					  repository = bitbucket_repository.testacc.name
+					  group      = bitbucket_group.testacc.name
+                      permission = "write"
+					}
+
+					resource "bitbucket_branch_restriction" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  repository = bitbucket_repository.testacc.name
+					  pattern    = "%s"
+					  kind       = "%s"
+					  users      = ["%s"]
+					  groups     = [bitbucket_group.testacc.slug]
+                      depends_on = [bitbucket_group_permission.testacc]
+					}`, workspaceSlug, projectName, projectKey, repoName, groupName, branchRestrictionPattern, branchRestrictionKind, branchRestrictionUser),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "workspace", workspaceSlug),
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "repository", repoName),
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "pattern", branchRestrictionPattern),
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "kind", branchRestrictionKind),
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "value", "0"),
+
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "groups.#", "1"),
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "groups.0", groupName),
+
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "users.#", "1"),
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "users.0", branchRestrictionUser),
+
+					resource.TestCheckResourceAttrSet("bitbucket_branch_restriction.testacc", "id"),
+				),
+			},
+		},
+	})
+}
+
 func TestAccBitbucketBranchRestrictionResource_withEmptyUsersAndEmptyGroups(t *testing.T) {
 	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
 	projectName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
