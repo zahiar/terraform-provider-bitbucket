@@ -9,6 +9,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -60,6 +61,16 @@ func TestAccBitbucketBranchRestrictionResource_basic(t *testing.T) {
 
 					resource.TestCheckResourceAttrSet("bitbucket_branch_restriction.testacc", "id"),
 				),
+			},
+			{
+				ResourceName:      "bitbucket_branch_restriction.testacc",
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					resources := state.Modules[0].Resources
+					branchRestResourceAttr := resources["bitbucket_branch_restriction.testacc"].Primary.Attributes
+					return fmt.Sprintf("%s/%s/%s", workspaceSlug, repoName, branchRestResourceAttr["id"]), nil
+				},
 			},
 		},
 	})
@@ -115,6 +126,16 @@ func TestAccBitbucketBranchRestrictionResource_withKindAndValueCombination(t *te
 
 					resource.TestCheckResourceAttrSet("bitbucket_branch_restriction.testacc", "id"),
 				),
+			},
+			{
+				ResourceName:      "bitbucket_branch_restriction.testacc",
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					resources := state.Modules[0].Resources
+					branchRestResourceAttr := resources["bitbucket_branch_restriction.testacc"].Primary.Attributes
+					return fmt.Sprintf("%s/%s/%s", workspaceSlug, repoName, branchRestResourceAttr["id"]), nil
+				},
 			},
 		},
 	})
@@ -172,6 +193,28 @@ func TestAccBitbucketBranchRestrictionResource_withUsers(t *testing.T) {
 
 					resource.TestCheckResourceAttrSet("bitbucket_branch_restriction.testacc", "id"),
 				),
+			},
+			{
+				ResourceName:      "bitbucket_branch_restriction.testacc",
+				ImportState:       true,
+				ImportStateVerify: false,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					resources := state.Modules[0].Resources
+					branchRestResourceAttr := resources["bitbucket_branch_restriction.testacc"].Primary.Attributes
+					return fmt.Sprintf("%s/%s/%s", workspaceSlug, repoName, branchRestResourceAttr["id"]), nil
+				},
+				ImportStateCheck: func(states []*terraform.InstanceState) error {
+					state := states[0]
+					assert.Equal(t, workspaceSlug, state.Attributes["workspace"])
+					assert.Equal(t, repoName, state.Attributes["repository"])
+					assert.Equal(t, branchRestrictionPattern, state.Attributes["pattern"])
+					assert.Equal(t, branchRestrictionKind, state.Attributes["kind"])
+					assert.Equal(t, "0", state.Attributes["value"])
+
+					assert.NotEmpty(t, state.Attributes["id"])
+
+					return nil
+				},
 			},
 		},
 	})
@@ -243,6 +286,28 @@ func TestAccBitbucketBranchRestrictionResource_withGroups(t *testing.T) {
 
 					resource.TestCheckResourceAttrSet("bitbucket_branch_restriction.testacc", "id"),
 				),
+			},
+			{
+				ResourceName:      "bitbucket_branch_restriction.testacc",
+				ImportState:       true,
+				ImportStateVerify: false,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					resources := state.Modules[0].Resources
+					branchRestResourceAttr := resources["bitbucket_branch_restriction.testacc"].Primary.Attributes
+					return fmt.Sprintf("%s/%s/%s", workspaceSlug, repoName, branchRestResourceAttr["id"]), nil
+				},
+				ImportStateCheck: func(states []*terraform.InstanceState) error {
+					state := states[0]
+					assert.Equal(t, workspaceSlug, state.Attributes["workspace"])
+					assert.Equal(t, repoName, state.Attributes["repository"])
+					assert.Equal(t, branchRestrictionPattern, state.Attributes["pattern"])
+					assert.Equal(t, branchRestrictionKind, state.Attributes["kind"])
+					assert.Equal(t, "0", state.Attributes["value"])
+
+					assert.NotEmpty(t, state.Attributes["id"])
+
+					return nil
+				},
 			},
 		},
 	})
@@ -318,6 +383,28 @@ func TestAccBitbucketBranchRestrictionResource_withUsersAndGroups(t *testing.T) 
 					resource.TestCheckResourceAttrSet("bitbucket_branch_restriction.testacc", "id"),
 				),
 			},
+			{
+				ResourceName:      "bitbucket_branch_restriction.testacc",
+				ImportState:       true,
+				ImportStateVerify: false,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					resources := state.Modules[0].Resources
+					branchRestResourceAttr := resources["bitbucket_branch_restriction.testacc"].Primary.Attributes
+					return fmt.Sprintf("%s/%s/%s", workspaceSlug, repoName, branchRestResourceAttr["id"]), nil
+				},
+				ImportStateCheck: func(states []*terraform.InstanceState) error {
+					state := states[0]
+					assert.Equal(t, workspaceSlug, state.Attributes["workspace"])
+					assert.Equal(t, repoName, state.Attributes["repository"])
+					assert.Equal(t, branchRestrictionPattern, state.Attributes["pattern"])
+					assert.Equal(t, branchRestrictionKind, state.Attributes["kind"])
+					assert.Equal(t, "0", state.Attributes["value"])
+
+					assert.NotEmpty(t, state.Attributes["id"])
+
+					return nil
+				},
+			},
 		},
 	})
 }
@@ -372,6 +459,16 @@ func TestAccBitbucketBranchRestrictionResource_withEmptyUsersAndEmptyGroups(t *t
 
 					resource.TestCheckResourceAttrSet("bitbucket_branch_restriction.testacc", "id"),
 				),
+			},
+			{
+				ResourceName:      "bitbucket_branch_restriction.testacc",
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					resources := state.Modules[0].Resources
+					branchRestResourceAttr := resources["bitbucket_branch_restriction.testacc"].Primary.Attributes
+					return fmt.Sprintf("%s/%s/%s", workspaceSlug, repoName, branchRestResourceAttr["id"]), nil
+				},
 			},
 		},
 	})
