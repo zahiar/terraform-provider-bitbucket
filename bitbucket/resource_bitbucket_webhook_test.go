@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -100,6 +101,16 @@ func TestAccBitbucketWebhookResource_basic(t *testing.T) {
 
 					resource.TestCheckResourceAttrSet("bitbucket_webhook.testacc", "id"),
 				),
+			},
+			{
+				ResourceName:      "bitbucket_webhook.testacc",
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					resources := state.Modules[0].Resources
+					webhookResourceAttr := resources["bitbucket_webhook.testacc"].Primary.Attributes
+					return fmt.Sprintf("%s/%s/%s", workspaceSlug, repoName, webhookResourceAttr["id"]), nil
+				},
 			},
 		},
 	})

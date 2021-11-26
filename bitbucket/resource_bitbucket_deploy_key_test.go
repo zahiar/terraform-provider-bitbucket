@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 func TestAccBitbucketDeployKeyResource_basic(t *testing.T) {
@@ -54,6 +55,16 @@ func TestAccBitbucketDeployKeyResource_basic(t *testing.T) {
 
 					resource.TestCheckResourceAttrSet("bitbucket_deploy_key.testacc", "id"),
 				),
+			},
+			{
+				ResourceName:      "bitbucket_deploy_key.testacc",
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					resources := state.Modules[0].Resources
+					depKeyResourceAttr := resources["bitbucket_deploy_key.testacc"].Primary.Attributes
+					return fmt.Sprintf("%s/%s/%s", workspaceSlug, repoName, depKeyResourceAttr["id"]), nil
+				},
 			},
 		},
 	})
@@ -103,6 +114,16 @@ func TestAccBitbucketDeployKeyResource_keyWithComment(t *testing.T) {
 
 					resource.TestCheckResourceAttrSet("bitbucket_deploy_key.testacc", "id"),
 				),
+			},
+			{
+				ResourceName:      "bitbucket_deploy_key.testacc",
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					resources := state.Modules[0].Resources
+					depKeyResourceAttr := resources["bitbucket_deploy_key.testacc"].Primary.Attributes
+					return fmt.Sprintf("%s/%s/%s", workspaceSlug, repoName, depKeyResourceAttr["id"]), nil
+				},
 			},
 		},
 	})

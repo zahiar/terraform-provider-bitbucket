@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -62,6 +63,14 @@ func TestAccBitbucketProjectResource_basic(t *testing.T) {
 					resource.TestCheckResourceAttr("bitbucket_project.testacc", "is_private", "false"),
 					resource.TestCheckResourceAttrSet("bitbucket_project.testacc", "id"),
 				),
+			},
+			{
+				ResourceName:      "bitbucket_project.testacc",
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					return fmt.Sprintf("%s/%s", workspaceSlug, projectKey), nil
+				},
 			},
 		},
 	})

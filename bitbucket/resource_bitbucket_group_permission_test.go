@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -61,6 +62,16 @@ func TestAccBitbucketGroupPermissionResource_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet("bitbucket_group_permission.testacc", "id"),
 					resource.TestCheckResourceAttrSet("bitbucket_group_permission.testacc", "workspace"),
 				),
+			},
+			{
+				ResourceName:      "bitbucket_group_permission.testacc",
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					resources := state.Modules[0].Resources
+					workspaceResourceAttr := resources["data.bitbucket_workspace.testacc"].Primary.Attributes
+					return fmt.Sprintf("%s/%s/%s", workspaceResourceAttr["uuid"], repoName, groupName), nil
+				},
 			},
 		},
 	})
