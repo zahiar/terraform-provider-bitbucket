@@ -1,15 +1,12 @@
 package bitbucket
 
 import (
-	"context"
-
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceBitbucketGroupPermission() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceBitbucketGroupPermissionRead,
+		ReadContext: resourceBitbucketGroupPermissionRead,
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Description: "The ID of the group permission.",
@@ -39,8 +36,4 @@ func dataSourceBitbucketGroupPermission() *schema.Resource {
 			},
 		},
 	}
-}
-
-func dataSourceBitbucketGroupPermissionRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	return resourceBitbucketGroupPermissionRead(ctx, resourceData, meta)
 }

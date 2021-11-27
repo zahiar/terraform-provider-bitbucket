@@ -1,15 +1,12 @@
 package bitbucket
 
 import (
-	"context"
-
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceBitbucketBranchRestriction() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceBitbucketBranchRestrictionRead,
+		ReadContext: resourceBitbucketBranchRestrictionRead,
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Description: "The ID of the branch restriction.",
@@ -44,8 +41,4 @@ func dataSourceBitbucketBranchRestriction() *schema.Resource {
 			},
 		},
 	}
-}
-
-func dataSourceBitbucketBranchRestrictionRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	return resourceBitbucketBranchRestrictionRead(ctx, resourceData, meta)
 }

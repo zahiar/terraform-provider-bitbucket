@@ -1,15 +1,12 @@
 package bitbucket
 
 import (
-	"context"
-
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceBitbucketProject() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceBitbucketProjectRead,
+		ReadContext: resourceBitbucketProjectRead,
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Description: "The UUID of the project.",
@@ -44,8 +41,4 @@ func dataSourceBitbucketProject() *schema.Resource {
 			},
 		},
 	}
-}
-
-func dataSourceBitbucketProjectRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	return resourceBitbucketProjectRead(ctx, resourceData, meta)
 }
