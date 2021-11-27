@@ -181,7 +181,7 @@ func resourceBitbucketBranchRestrictionUpdate(ctx context.Context, resourceData 
 		return diag.FromErr(fmt.Errorf("unable to update branch restriction with error: %s", err))
 	}
 
-	return resourceBitbucketRepositoryRead(ctx, resourceData, meta)
+	return resourceBitbucketBranchRestrictionRead(ctx, resourceData, meta)
 }
 
 func resourceBitbucketBranchRestrictionDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {

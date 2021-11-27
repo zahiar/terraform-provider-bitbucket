@@ -1,15 +1,12 @@
 package bitbucket
 
 import (
-	"context"
-
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceBitbucketWebhook() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceBitbucketWebhookRead,
+		ReadContext: resourceBitbucketWebhookRead,
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Description: "The UUID of the webhook.",
@@ -52,8 +49,4 @@ func dataSourceBitbucketWebhook() *schema.Resource {
 			},
 		},
 	}
-}
-
-func dataSourceBitbucketWebhookRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	return resourceBitbucketWebhookRead(ctx, resourceData, meta)
 }

@@ -97,6 +97,8 @@ func resourceBitbucketDefaultReviewerRead(ctx context.Context, resourceData *sch
 		}
 	}
 
+	resourceData.SetId(generateDefaultReviewerResourceId(workspace, repository, user))
+
 	return nil
 }
 
@@ -131,27 +133,10 @@ func resourceBitbucketDefaultReviewerImport(ctx context.Context, resourceData *s
 		return ret, fmt.Errorf("invalid import ID. It must to be in this format \"<workspace-slug|workspace-uuid>/<repository-slug|repository-uuid>/<user-uuid>\"")
 	}
 
-	workspace := splitID[0]
-	repository := splitID[1]
-	user := splitID[2]
-
-	_ = resourceData.Set("workspace", workspace)
-	_ = resourceData.Set("repository", repository)
-	_ = resourceData.Set("user", user)
-
-	client := meta.(*Clients).V2
-	_, err := client.Repositories.Repository.GetDefaultReviewer(
-		&gobb.RepositoryDefaultReviewerOptions{
-			Owner:    workspace,
-			RepoSlug: repository,
-			Username: user,
-		},
-	)
-	if err != nil {
-		return ret, fmt.Errorf("unable to import default reviewer for repository with error: %s", err)
-	}
-
-	resourceData.SetId(generateDefaultReviewerResourceId(workspace, repository, user))
+	_ = resourceData.Set("workspace", splitID[0])
+	_ = resourceData.Set("repository", splitID[1])
+	_ = resourceData.Set("user", splitID[2])
+	_ = resourceBitbucketDefaultReviewerRead(ctx, resourceData, meta)
 
 	return ret, nil
 }

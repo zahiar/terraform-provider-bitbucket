@@ -1,15 +1,12 @@
 package bitbucket
 
 import (
-	"context"
-
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceBitbucketDeployKey() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceBitbucketDeployKeyRead,
+		ReadContext: resourceBitbucketDeployKeyRead,
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Description: "The ID of the deploy key.",
@@ -40,8 +37,4 @@ func dataSourceBitbucketDeployKey() *schema.Resource {
 			},
 		},
 	}
-}
-
-func dataSourceBitbucketDeployKeyRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	return resourceBitbucketDeployKeyRead(ctx, resourceData, meta)
 }
