@@ -90,3 +90,23 @@ func (gm *GroupMembers) Create(gmo *GroupMemberOptions) (*GroupMember, error) {
 
 	return result, nil
 }
+
+func (gm *GroupMembers) Delete(gmo *GroupMemberOptions) error {
+	url := fmt.Sprintf("%s/groups/%s/%s/members/%s", gm.client.ApiBaseUrl, gmo.OwnerUuid, gmo.Slug, gmo.UserUuid)
+	request, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return err
+	}
+
+	request.SetBasicAuth(gm.client.Auth.Username, gm.client.Auth.Password)
+
+	response, err := gm.client.HttpClient.Do(request)
+	if err != nil {
+		return nil
+	}
+	if response.StatusCode != http.StatusNoContent {
+		return fmt.Errorf("response status code was not 204")
+	}
+
+	return nil
+}

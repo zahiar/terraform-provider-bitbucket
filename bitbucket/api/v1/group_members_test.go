@@ -69,6 +69,33 @@ func TestGroupMembers(t *testing.T) {
 		}
 	})
 
+	t.Run("Delete", func(t *testing.T) {
+		err := c.GroupMembers.Delete(
+			&GroupMemberOptions{
+				OwnerUuid: c.Auth.Username,
+				Slug:      group.Slug,
+				UserUuid:  group.Owner.Uuid,
+			},
+		)
+		if err != nil {
+			t.Error(err)
+		}
+
+		members, err := c.GroupMembers.Get(
+			&GroupMemberOptions{
+				OwnerUuid: c.Auth.Username,
+				Slug:      group.Slug,
+			},
+		)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if len(members) != 0 {
+			t.Error("The GroupMember list contains unexpected members after deleting the member.")
+		}
+	})
+
 	t.Run("teardown", func(t *testing.T) {
 		opt := &GroupOptions{
 			OwnerUuid: c.Auth.Username,
