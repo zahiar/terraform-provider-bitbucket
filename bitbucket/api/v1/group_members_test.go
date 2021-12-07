@@ -44,8 +44,7 @@ func TestGroupMembers(t *testing.T) {
 
 		if result == nil {
 			t.Error("Expected result")
-		}
-		if (*result).UUID != group.Owner.Uuid {
+		} else if result.UUID != group.Owner.Uuid {
 			t.Error("The GroupMember list contains an unexpected member.")
 		}
 	})

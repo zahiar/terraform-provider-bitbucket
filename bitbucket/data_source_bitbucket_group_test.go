@@ -26,8 +26,8 @@ func TestAccBitbucketGroupDataSource_basic(t *testing.T) {
 					resource "bitbucket_group" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.id
 					  name       = "%s"
-                      auto_add   = true
-                      permission = "read"
+					  auto_add   = true
+					  permission = "read"
 					}
 	
 					data "bitbucket_group" "testacc" {

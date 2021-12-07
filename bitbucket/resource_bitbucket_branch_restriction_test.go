@@ -254,14 +254,14 @@ func TestAccBitbucketBranchRestrictionResource_withGroups(t *testing.T) {
 					resource "bitbucket_group" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.id
 					  name       = "%s"
-                      permission = "write"
+					  permission = "write"
 					}
 
 					resource "bitbucket_group_permission" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.uuid
 					  repository = bitbucket_repository.testacc.name
 					  group      = bitbucket_group.testacc.name
-                      permission = "write"
+					  permission = "write"
 					}
 
 					resource "bitbucket_branch_restriction" "testacc" {
@@ -270,7 +270,7 @@ func TestAccBitbucketBranchRestrictionResource_withGroups(t *testing.T) {
 					  pattern    = "%s"
 					  kind       = "%s"
 					  groups     = [bitbucket_group.testacc.slug]
-                      depends_on = [bitbucket_group_permission.testacc]
+					  depends_on = [bitbucket_group_permission.testacc]
 					}`, workspaceSlug, projectName, projectKey, repoName, groupName, branchRestrictionPattern, branchRestrictionKind),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "workspace", workspaceSlug),
@@ -348,14 +348,14 @@ func TestAccBitbucketBranchRestrictionResource_withUsersAndGroups(t *testing.T) 
 					resource "bitbucket_group" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.id
 					  name       = "%s"
-                      permission = "write"
+					  permission = "write"
 					}
 
 					resource "bitbucket_group_permission" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.uuid
 					  repository = bitbucket_repository.testacc.name
 					  group      = bitbucket_group.testacc.name
-                      permission = "write"
+					  permission = "write"
 					}
 
 					resource "bitbucket_branch_restriction" "testacc" {
@@ -365,7 +365,7 @@ func TestAccBitbucketBranchRestrictionResource_withUsersAndGroups(t *testing.T) 
 					  kind       = "%s"
 					  users      = ["%s"]
 					  groups     = [bitbucket_group.testacc.slug]
-                      depends_on = [bitbucket_group_permission.testacc]
+					  depends_on = [bitbucket_group_permission.testacc]
 					}`, workspaceSlug, projectName, projectKey, repoName, groupName, branchRestrictionPattern, branchRestrictionKind, branchRestrictionUser),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_branch_restriction.testacc", "workspace", workspaceSlug),

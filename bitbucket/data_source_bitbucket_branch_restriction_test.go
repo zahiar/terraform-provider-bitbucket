@@ -106,7 +106,7 @@ func TestAccBitbucketBranchRestrictionDataSource_withKindAndValueCombination(t *
 					  repository = bitbucket_repository.testacc.name
 					  pattern    = "%s"
 					  kind       = "%s"
-                      value      = %d
+					  value      = %d
 					}
 
 					data "bitbucket_branch_restriction" "testacc" {
