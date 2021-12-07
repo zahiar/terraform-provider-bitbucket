@@ -33,8 +33,8 @@ func TestAccBitbucketGroupMemberResource_basic(t *testing.T) {
 					resource "bitbucket_group" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.uuid
 					  name       = "%s"
-                      auto_add   = true
-                      permission = "read"
+					  auto_add   = true
+					  permission = "read"
 					}
 
 					resource "bitbucket_group_member" "testacc" {
