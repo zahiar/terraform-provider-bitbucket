@@ -4,22 +4,24 @@ Manage a repository within Bitbucket.
 ## Example Usage
 ```hcl
 resource "bitbucket_repository" "example" {
-  workspace   = "workspace-slug"
-  name        = "example-repo"
-  project_key = "EXP"
-  description = "An example repository"
-  is_private  = true
-  fork_policy = "no_forks"
+  workspace        = "workspace-slug"
+  name             = "example-repo"
+  project_key      = "EXP"
+  description      = "An example repository"
+  is_private       = true
+  fork_policy      = "no_forks"
+  enable_pipelines = false
 }
 ```
 ```hcl
 resource "bitbucket_repository" "example" {
-  workspace   = "{workspace-uuid}"
-  name        = "example-repo"
-  project_key = "EXP"
-  description = "An example repository"
-  is_private  = true
-  fork_policy = "no_forks"
+  workspace        = "{workspace-uuid}"
+  name             = "example-repo"
+  project_key      = "EXP"
+  description      = "An example repository"
+  is_private       = true
+  fork_policy      = "no_forks"
+  enable_pipelines = false
 }
 ```
 
@@ -31,6 +33,7 @@ The following arguments are supported:
 * `description` - (Optional) The description of the repository. Defaults to empty string.
 * `is_private` - (Optional) A boolean to state if the repository is private or not. Defaults to `true`.
 * `fork_policy` - (Optional) The name of the fork policy to apply to this repository. Defaults to `no_forks`. Only applies if `is_private` is set to `true`.
+* `enable_pipelines` - (Optional) A boolean to state if pipelines have been enabled for this repository. Defaults to `false`.
 
 ## Attribute Reference
 In addition to the arguments above, the following additional attributes are exported:

@@ -27,3 +27,4 @@ In addition to the arguments above, the following additional attributes are expo
 * `description` - The description of the repository.
 * `is_private` - A boolean to state if the repository is private or not.
 * `fork_policy` - The name of the fork policy set on the repository.
+* `enable_pipelines` - A boolean to state if pipelines have been enabled for this repository.
