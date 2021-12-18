@@ -68,6 +68,12 @@ func resourceBitbucketRepository() *schema.Resource {
 					return !resourceData.Get("is_private").(bool)
 				},
 			},
+			"enable_pipelines": {
+				Description: "A boolean to state if pipelines have been enabled for this repository.",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+			},
 		},
 	}
 }
@@ -90,6 +96,17 @@ func resourceBitbucketRepositoryCreate(ctx context.Context, resourceData *schema
 	}
 
 	resourceData.SetId(repository.Uuid)
+
+	_, err = client.Repositories.Repository.UpdatePipelineConfig(
+		&gobb.RepositoryPipelineOptions{
+			Owner:    resourceData.Get("workspace").(string),
+			RepoSlug: resourceData.Get("name").(string),
+			Enabled:  resourceData.Get("enable_pipelines").(bool),
+		},
+	)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("unable to enable pipelines for repository with error: %s", err))
+	}
 
 	return resourceBitbucketRepositoryRead(ctx, resourceData, meta)
 }
@@ -114,6 +131,18 @@ func resourceBitbucketRepositoryRead(ctx context.Context, resourceData *schema.R
 
 	resourceData.SetId(repository.Uuid)
 
+	repositoryPipelineConfig, err := client.Repositories.Repository.GetPipelineConfig(
+		&gobb.RepositoryPipelineOptions{
+			Owner:    resourceData.Get("workspace").(string),
+			RepoSlug: resourceData.Get("name").(string),
+		},
+	)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("unable to get pipeline configuration for repository with error: %s", err))
+	}
+
+	_ = resourceData.Set("enable_pipelines", repositoryPipelineConfig.Enabled)
+
 	return nil
 }
 
@@ -133,6 +162,17 @@ func resourceBitbucketRepositoryUpdate(ctx context.Context, resourceData *schema
 	)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to update repository with error: %s", err))
+	}
+
+	_, err = client.Repositories.Repository.UpdatePipelineConfig(
+		&gobb.RepositoryPipelineOptions{
+			Owner:    resourceData.Get("workspace").(string),
+			RepoSlug: resourceData.Get("name").(string),
+			Enabled:  resourceData.Get("enable_pipelines").(bool),
+		},
+	)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("unable to update pipeline configuration for repository with error: %s", err))
 	}
 
 	return resourceBitbucketRepositoryRead(ctx, resourceData, meta)

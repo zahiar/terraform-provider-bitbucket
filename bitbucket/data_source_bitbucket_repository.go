@@ -44,6 +44,11 @@ func dataSourceBitbucketRepository() *schema.Resource {
 				Type:        schema.TypeString,
 				Computed:    true,
 			},
+			"enable_pipelines": {
+				Description: "A boolean to state if pipelines have been enabled for this repository.",
+				Type:        schema.TypeBool,
+				Computed:    true,
+			},
 		},
 	}
 }
