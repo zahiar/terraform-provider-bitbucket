@@ -91,7 +91,7 @@ func resourceBitbucketPipelineVariableRead(ctx context.Context, resourceData *sc
 		},
 	)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("unable to get repository variable with error: %s", err))
+		return diag.FromErr(fmt.Errorf("unable to get pipeline variable with error: %s", err))
 	}
 
 	_ = resourceData.Set("key", pipelineVariable.Key)
@@ -123,7 +123,7 @@ func resourceBitbucketPipelineVariableUpdate(ctx context.Context, resourceData *
 		},
 	)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("unable to update repository variable with error: %s", err))
+		return diag.FromErr(fmt.Errorf("unable to update pipeline variable with error: %s", err))
 	}
 
 	return resourceBitbucketPipelineVariableRead(ctx, resourceData, meta)
@@ -140,7 +140,7 @@ func resourceBitbucketPipelineVariableDelete(ctx context.Context, resourceData *
 		},
 	)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("unable to delete repository variable with error: %s", err))
+		return diag.FromErr(fmt.Errorf("unable to delete pipeline variable with error: %s", err))
 	}
 
 	resourceData.SetId("")
@@ -168,7 +168,7 @@ func resourceBitbucketPipelineVariableImport(ctx context.Context, resourceData *
 func validateRepositoryVariableName(val interface{}, path cty.Path) diag.Diagnostics {
 	match, _ := regexp.MatchString("^([a-zA-Z])[a-zA-Z0-9_]+$", val.(string))
 	if !match {
-		return diag.FromErr(fmt.Errorf("repository variable name must consist of only ASCII letters, numbers, underscores & not begin with a number (a-z, 0-9, _)"))
+		return diag.FromErr(fmt.Errorf("variable name must consist of only ASCII letters, numbers, underscores & not begin with a number (a-z, 0-9, _)"))
 	}
 
 	return diag.Diagnostics{}
