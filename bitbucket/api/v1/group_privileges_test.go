@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	gobb "github.com/ktrysmt/go-bitbucket"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGroupPrivileges(t *testing.T) {
@@ -33,9 +34,7 @@ func TestGroupPrivileges(t *testing.T) {
 				Name:      "tf-bb-group-test",
 			},
 		)
-		if group == nil {
-			t.Error("The Group could not be created.")
-		}
+		assert.NotNil(t, group)
 
 		project, _ = gobbClient.Workspaces.CreateProject(
 			&gobb.ProjectOptions{
@@ -45,9 +44,7 @@ func TestGroupPrivileges(t *testing.T) {
 				IsPrivate: true,
 			},
 		)
-		if project == nil {
-			t.Error("The Project could not be created.")
-		}
+		assert.NotNil(t, project)
 
 		repo, _ = gobbClient.Repositories.Repository.Create(
 			&gobb.RepositoryOptions{
@@ -58,9 +55,7 @@ func TestGroupPrivileges(t *testing.T) {
 				IsPrivate:  "true",
 			},
 		)
-		if repo == nil {
-			t.Error("The Repository could not be created.")
-		}
+		assert.NotNil(t, repo)
 	})
 
 	t.Run("create", func(t *testing.T) {
@@ -72,19 +67,11 @@ func TestGroupPrivileges(t *testing.T) {
 			Privilege:   "write",
 		}
 		groupPrivilege, err := c.GroupPrivileges.Create(opt)
-		if err != nil {
-			t.Error(err)
-		}
 
-		if groupPrivilege.Privilege != "write" {
-			t.Error("The Group Privilege `privilege` attribute does not match the expected value.")
-		}
-		if groupPrivilege.Group.Slug != group.Slug {
-			t.Error("The Group Privilege `group.slug` attribute does not match the expected value.")
-		}
-		if groupPrivilege.Repository.Slug != repo.Slug {
-			t.Error("The Group Privilege `repo.slug` attribute does not match the expected value.")
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, "write", groupPrivilege.Privilege)
+		assert.Equal(t, group.Slug, groupPrivilege.Group.Slug)
+		assert.Equal(t, repo.Slug, groupPrivilege.Repository.Slug)
 	})
 
 	t.Run("get", func(t *testing.T) {
@@ -95,19 +82,11 @@ func TestGroupPrivileges(t *testing.T) {
 			GroupSlug:   group.Slug,
 		}
 		groupPrivilege, err := c.GroupPrivileges.Get(opt)
-		if err != nil {
-			t.Error(err)
-		}
 
-		if groupPrivilege.Privilege != "write" {
-			t.Error("The Group Privilege `privilege` attribute does not match the expected value.")
-		}
-		if groupPrivilege.Group.Slug != group.Slug {
-			t.Error("The Group Privilege `group.slug` attribute does not match the expected value.")
-		}
-		if groupPrivilege.Repository.Slug != repo.Slug {
-			t.Error("The Group Privilege `repo.slug` attribute does not match the expected value.")
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, "write", groupPrivilege.Privilege)
+		assert.Equal(t, group.Slug, groupPrivilege.Group.Slug)
+		assert.Equal(t, repo.Slug, groupPrivilege.Repository.Slug)
 	})
 
 	t.Run("delete", func(t *testing.T) {
@@ -119,19 +98,17 @@ func TestGroupPrivileges(t *testing.T) {
 				GroupSlug:   group.Slug,
 			},
 		)
-		if err != nil {
-			t.Error(err)
-		}
+		assert.NoError(t, err)
+	})
 
-		err = c.Groups.Delete(
+	t.Run("teardown", func(t *testing.T) {
+		err := c.Groups.Delete(
 			&GroupOptions{
 				OwnerUuid: c.Auth.Username,
 				Slug:      group.Slug,
 			},
 		)
-		if err != nil {
-			t.Error(err)
-		}
+		assert.NoError(t, err)
 
 		_, err = gobbClient.Repositories.Repository.Delete(
 			&gobb.RepositoryOptions{
@@ -140,9 +117,7 @@ func TestGroupPrivileges(t *testing.T) {
 				Project:  project.Key,
 			},
 		)
-		if err != nil {
-			t.Error(err)
-		}
+		assert.NoError(t, err)
 
 		_, err = gobbClient.Workspaces.DeleteProject(
 			&gobb.ProjectOptions{
@@ -151,8 +126,6 @@ func TestGroupPrivileges(t *testing.T) {
 				Key:   project.Key,
 			},
 		)
-		if err != nil {
-			t.Error(err)
-		}
+		assert.NoError(t, err)
 	})
 }

@@ -28,19 +28,11 @@ func TestGroups(t *testing.T) {
 		}
 
 		group, err := c.Groups.Create(opt)
-		if err != nil {
-			t.Error(err)
-		}
 
-		if group.Name != name {
-			t.Error("The Group `name` attribute does not match the expected value.")
-		}
-		if group.AutoAdd != false {
-			t.Error("The Group `auto_add` attribute does not match the expected value.")
-		}
-		if group.Permission != "" {
-			t.Error("The Group `permission` attribute does not match the expected value.")
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, name, group.Name)
+		assert.False(t, group.AutoAdd)
+		assert.Empty(t, group.Permission)
 
 		groupResourceSlug = group.Slug
 	})
@@ -51,22 +43,12 @@ func TestGroups(t *testing.T) {
 			Slug:      groupResourceSlug,
 		}
 		group, err := c.Groups.Get(opt)
-		if err != nil {
-			t.Error(err)
-		}
 
-		if group.Name != name {
-			t.Error("The Group `name` attribute does not match the expected value.")
-		}
-		if group.AutoAdd != false {
-			t.Error("The Group `auto_add` attribute does not match the expected value.")
-		}
-		if group.Permission != "" {
-			t.Error("The Group `permission` attribute does not match the expected value.")
-		}
-		if group.Slug != groupResourceSlug {
-			t.Error("The Group `slug` attribute does not match the expected value.")
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, name, group.Name)
+		assert.False(t, group.AutoAdd)
+		assert.Empty(t, group.Permission)
+		assert.Equal(t, groupResourceSlug, group.Slug)
 	})
 
 	t.Run("update", func(t *testing.T) {
@@ -77,22 +59,12 @@ func TestGroups(t *testing.T) {
 			Permission: "write",
 		}
 		group, err := c.Groups.Update(opt)
-		if err != nil {
-			t.Error(err)
-		}
 
-		if group.Name != name {
-			t.Error("The Group `name` attribute does not match the expected value.")
-		}
-		if group.AutoAdd != true {
-			t.Error("The Group `auto_add` attribute does not match the expected value.")
-		}
-		if group.Permission != "write" {
-			t.Error("The Group `permission` attribute does not match the expected value.")
-		}
-		if group.Slug != groupResourceSlug {
-			t.Error("The Group `slug` attribute does not match the expected value.")
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, name, group.Name)
+		assert.True(t, group.AutoAdd)
+		assert.Equal(t, "write", group.Permission)
+		assert.Equal(t, groupResourceSlug, group.Slug)
 	})
 
 	t.Run("delete", func(t *testing.T) {
@@ -101,9 +73,7 @@ func TestGroups(t *testing.T) {
 			Slug:      groupResourceSlug,
 		}
 		err := c.Groups.Delete(opt)
-		if err != nil {
-			t.Error(err)
-		}
+		assert.NoError(t, err)
 	})
 }
 
