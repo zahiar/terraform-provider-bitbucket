@@ -57,6 +57,9 @@ func (g *Groups) Get(gro *GroupOptions) (*Group, error) {
 		log.Println("Could not unmarshal JSON payload")
 		return nil, err
 	}
+	if len(result) == 0 {
+		return nil, fmt.Errorf("no group found")
+	}
 
 	return &result[0], nil
 }
