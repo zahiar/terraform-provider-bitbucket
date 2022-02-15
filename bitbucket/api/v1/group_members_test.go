@@ -3,6 +3,8 @@ package v1
 import (
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGroupMembers(t *testing.T) {
@@ -24,12 +26,10 @@ func TestGroupMembers(t *testing.T) {
 				Name:      "tf-bb-group-members-test",
 			},
 		)
-		if group == nil {
-			t.Error("The Group could not be created.")
-		}
+		assert.NotNil(t, group, "The Group could not be created")
 	})
 
-	t.Run("Create", func(t *testing.T) {
+	t.Run("create", func(t *testing.T) {
 		result, err := c.GroupMembers.Create(
 			&GroupMemberOptions{
 				OwnerUuid: c.Auth.Username,
@@ -38,37 +38,25 @@ func TestGroupMembers(t *testing.T) {
 			},
 		)
 
-		if err != nil {
-			t.Error(err)
-		}
-
-		if result == nil {
-			t.Error("Expected result")
-		} else if result.UUID != group.Owner.Uuid {
-			t.Error("The GroupMember list contains an unexpected member.")
-		}
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, group.Owner.Uuid, result.UUID, "The GroupMember list contains an unexpected member")
 	})
 
-	t.Run("Get", func(t *testing.T) {
+	t.Run("get", func(t *testing.T) {
 		members, err := c.GroupMembers.Get(
 			&GroupMemberOptions{
 				OwnerUuid: c.Auth.Username,
 				Slug:      group.Slug,
 			},
 		)
-		if err != nil {
-			t.Error(err)
-		}
 
-		if len(members) != 1 {
-			t.Error("The GroupMember list contains unexpected members.")
-		}
-		if members[0].UUID != group.Owner.Uuid {
-			t.Error("The GroupMember list contains an unexpected member.")
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, 1, len(members), "The GroupMember list contains unexpected members")
+		assert.Equal(t, group.Owner.Uuid, members[0].UUID, "The GroupMember list contains an unexpected member")
 	})
 
-	t.Run("Delete", func(t *testing.T) {
+	t.Run("delete", func(t *testing.T) {
 		err := c.GroupMembers.Delete(
 			&GroupMemberOptions{
 				OwnerUuid: c.Auth.Username,
@@ -76,9 +64,7 @@ func TestGroupMembers(t *testing.T) {
 				UserUuid:  group.Owner.Uuid,
 			},
 		)
-		if err != nil {
-			t.Error(err)
-		}
+		assert.NoError(t, err)
 
 		members, err := c.GroupMembers.Get(
 			&GroupMemberOptions{
@@ -86,13 +72,8 @@ func TestGroupMembers(t *testing.T) {
 				Slug:      group.Slug,
 			},
 		)
-		if err != nil {
-			t.Error(err)
-		}
-
-		if len(members) != 0 {
-			t.Error("The GroupMember list contains unexpected members after deleting the member.")
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, 0, len(members), "The GroupMember list contains unexpected members after deleting the member")
 	})
 
 	t.Run("teardown", func(t *testing.T) {
@@ -101,8 +82,6 @@ func TestGroupMembers(t *testing.T) {
 			Slug:      group.Slug,
 		}
 		err := c.Groups.Delete(opt)
-		if err != nil {
-			t.Error(err)
-		}
+		assert.NoError(t, err)
 	})
 }
