@@ -35,7 +35,7 @@ func resourceBitbucketRepository() *schema.Resource {
 				Required:    true,
 			},
 			"name": {
-				Description:      "The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).",
+				Description:      "The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores, hyphens and periods).",
 				Type:             schema.TypeString,
 				Required:         true,
 				ValidateDiagFunc: validateRepositoryName,
@@ -213,7 +213,7 @@ func resourceBitbucketRepositoryImport(ctx context.Context, resourceData *schema
 }
 
 func validateRepositoryName(val interface{}, path cty.Path) diag.Diagnostics {
-	match, _ := regexp.MatchString("^[a-z0-9_-]+$", val.(string))
+	match, _ := regexp.MatchString("^[a-z0-9\\._-]+$", val.(string))
 	if !match {
 		return diag.FromErr(fmt.Errorf("repository name must only consist of lowercase ASCII letters, numbers, underscores & hyphens (a-z, 0-9, _, -)"))
 	}
