@@ -22,7 +22,7 @@ resource "bitbucket_deploy_key" "example" {
 ## Argument Reference
 The following arguments are supported:
 * `workspace` - (Required) The slug or UUID (including the enclosing `{}`) of the workspace.
-* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).
+* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores, hyphens and periods).
 * `label` - (Required) The label of the deploy key.
 * `key` - (Required) The public SSH key attached to this deploy key.
 

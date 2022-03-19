@@ -16,7 +16,7 @@ resource "bitbucket_deployment_variable" "example" {
 ## Argument Reference
 The following arguments are supported:
 * `workspace` - (Required) The slug or UUID (including the enclosing `{}`) of the workspace.
-* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).
+* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores, hyphens and periods).
 * `deployment` - (Required) The UUID (including the enclosing `{}`) of the deployment environment.
 * `key` - (Required) The name of the variable (must consist of only ASCII letters, numbers, underscores & not begin with a number).
 * `value` - (Required) The value of the variable.

@@ -22,7 +22,7 @@ resource "bitbucket_deployment" "example" {
 ## Argument Reference
 The following arguments are supported:
 * `workspace` - (Required) The slug or UUID (including the enclosing `{}`) of the workspace.
-* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).
+* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores, hyphens and periods).
 * `name` - (Required) The name of the deployment environment.
 * `environment` - (Required)The environment of the deployment (must be either 'Test', 'Staging' or 'Production').
 

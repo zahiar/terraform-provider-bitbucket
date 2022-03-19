@@ -28,7 +28,7 @@ resource "bitbucket_repository" "example" {
 ## Argument Reference
 The following arguments are supported:
 * `workspace` - (Required) The slug or UUID (including the enclosing `{}`) of the workspace this repository belongs to.
-* `name` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).
+* `name` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores, hyphens and periods).
 * `project_key` - (Required) The key of the project this repository belongs to.
 * `description` - (Optional) The description of the repository. Defaults to empty string.
 * `is_private` - (Optional) A boolean to state if the repository is private or not. Defaults to `true`.

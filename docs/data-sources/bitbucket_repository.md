@@ -18,7 +18,7 @@ data "bitbucket_repository" "example" {
 ## Argument Reference
 The following arguments are supported:
 * `workspace` - (Required) The slug or UUID (including the enclosing `{}`) of the workspace this repository belongs to.
-* `name` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).
+* `name` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores, hyphens and periods).
 
 ## Attribute Reference
 In addition to the arguments above, the following additional attributes are exported:
