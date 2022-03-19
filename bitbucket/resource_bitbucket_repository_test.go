@@ -130,7 +130,10 @@ func TestValidateRepositoryName(t *testing.T) {
 	validator := validateRepositoryName(invalidName, nil)
 	assert.True(t, validator.HasError())
 
-	validName := "abc-def"
-	validator = validateRepositoryName(validName, nil)
-	assert.False(t, validator.HasError())
+	validNames := []string{"abc-def","foo.bar"}
+
+	for _, validName := range validNames {
+		validator = validateRepositoryName(validName, nil)
+		assert.False(t, validator.HasError())
+	}
 }
