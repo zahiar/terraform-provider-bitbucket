@@ -41,7 +41,7 @@ resource "bitbucket_branch_restriction" "restrict-pushes-to-group" {
 ## Argument Reference
 The following arguments are supported:
 * `workspace` - (Required) The slug or UUID (including the enclosing `{}`) of the workspace.
-* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).
+* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores, hyphens and periods).
 * `pattern` - The pattern to match against branches this restriction will apply to.
 * `kind` - The type of restriction to apply - see list below.
 * `value` - A configurable value used by the following restrictions: `require_passing_builds_to_merge` uses it to define the number of minimum number of passing builds, `require_approvals_to_merge` uses it to define the minimum number of approvals before the PR can be merged, `require_default_reviewer_approvals_to_merge` uses it to define the minimum number of approvals from default reviewers before the PR can be merged.

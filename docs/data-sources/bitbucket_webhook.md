@@ -21,7 +21,7 @@ data "bitbucket_webhook" "example" {
 The following arguments are supported:
 * `id` - (Required) The UUID (including the enclosing `{}`) of the webhook.
 * `workspace` - (Required) The slug or UUID (including the enclosing `{}`) of the workspace this webhook belongs to.
-* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).
+* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores, hyphens and periods).
 
 ## Attribute Reference
 In addition to the arguments above, the following additional attributes are exported:

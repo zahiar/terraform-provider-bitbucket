@@ -21,7 +21,7 @@ data "bitbucket_pipeline_variable" "example" {
 The following arguments are supported:
 * `id` - (Required) The ID of the pipeline variable.
 * `workspace` - (Required) The slug or UUID (including the enclosing `{}`) of the workspace.
-* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).
+* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores, hyphens and periods).
 
 ## Attribute Reference
 In addition to the arguments above, the following additional attributes are exported:

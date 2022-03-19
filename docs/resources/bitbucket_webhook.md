@@ -26,7 +26,7 @@ resource "bitbucket_webhook" "example" {
 ## Argument Reference
 The following arguments are supported:
 * `workspace` - (Required) The slug or UUID (including the enclosing `{}`) of the workspace this webhook belongs to.
-* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).
+* `repository` - (Required) The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores, hyphens and periods).
 * `name` - (Required) The name of the webhook.
 * `url` - (Required) The url to configure the webhook with.
 * `events` - (Required) A list of events that will trigger the webhook - see list below.
