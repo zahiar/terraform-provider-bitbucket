@@ -138,10 +138,17 @@ func resourceBitbucketRepositoryRead(ctx context.Context, resourceData *schema.R
 		},
 	)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("unable to get pipeline configuration for repository with error: %s", err))
-	}
+		// Underlying go-bitbucket library only returns an error object, so this is our best way to check for a 404.
+		// This specifically addresses an issue whereby if you import a Bitbucket repository that has never had its
+		// pipelines enabled, Bitbucket's API returns a 404.
+		if err.Error() != "unable to get pipeline config: 404 Not Found" {
+			return diag.FromErr(fmt.Errorf("unable to get pipeline configuration for repository with error: %s", err))
+		}
 
-	_ = resourceData.Set("enable_pipelines", repositoryPipelineConfig.Enabled)
+		_ = resourceData.Set("enable_pipelines", false)
+	} else {
+		_ = resourceData.Set("enable_pipelines", repositoryPipelineConfig.Enabled)
+	}
 
 	return nil
 }
