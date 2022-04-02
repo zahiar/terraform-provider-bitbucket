@@ -138,6 +138,14 @@ func resourceBitbucketBranchRestrictionRead(ctx context.Context, resourceData *s
 		},
 	)
 	if err != nil {
+		// Handles a case whereby if the branch restrictions were deleted after being provisioned, Bitbucket's API
+		// returns a 404, so we treat that as the item having been deleted, therefore Terraform will re-provision
+		// if necessary.
+		if err.Error() == "404 Not Found" {
+			resourceData.SetId("")
+			return nil
+		}
+
 		return diag.FromErr(fmt.Errorf("unable to get branch restriction with error: %s", err))
 	}
 
