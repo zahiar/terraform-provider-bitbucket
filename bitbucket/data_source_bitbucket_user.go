@@ -2,8 +2,6 @@ package bitbucket
 
 import (
 	"context"
-	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -46,14 +44,9 @@ func dataSourceBitbucketUser() *schema.Resource {
 func dataSourceBitbucketUserRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*Clients).V2
 
-	userResponse, err := client.Users.Get(resourceData.Get("id").(string))
+	user, err := client.Users.Get(resourceData.Get("id").(string))
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to get user with error: %s", err))
-	}
-
-	user, err := decodeUserResponse(userResponse)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("unable to decode user response with error: %s", err))
 	}
 
 	_ = resourceData.Set("nickname", user.Nickname)
@@ -63,30 +56,4 @@ func dataSourceBitbucketUserRead(ctx context.Context, resourceData *schema.Resou
 	resourceData.SetId(user.Uuid)
 
 	return nil
-}
-
-type User struct {
-	Uuid          string
-	DisplayName   string `json:"display_name"`
-	Nickname      string
-	AccountId     string `json:"account_id"`
-	AccountStatus string `json:"account_status"`
-}
-
-func decodeUserResponse(response interface{}) (*User, error) {
-	userMap := response.(map[string]interface{})
-
-	if userMap["type"] == "error" {
-		return nil, errors.New("unable able to decode user API response")
-	}
-
-	user := &User{}
-	jsonString, err := json.Marshal(userMap)
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(jsonString, &user)
-
-	return user, err
 }
