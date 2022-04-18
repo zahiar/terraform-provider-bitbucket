@@ -22,11 +22,11 @@ func TestAccBitbucketUserDataSource_basic(t *testing.T) {
 						id = "%s"
 					}`, user.Uuid),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.bitbucket_user.testacc", "id", user.Uuid),
 					resource.TestCheckResourceAttr("data.bitbucket_user.testacc", "nickname", user.Nickname),
 					resource.TestCheckResourceAttr("data.bitbucket_user.testacc", "display_name", user.DisplayName),
 					resource.TestCheckResourceAttr("data.bitbucket_user.testacc", "account_status", user.AccountStatus),
-					resource.TestCheckResourceAttrSet("data.bitbucket_user.testacc", "id"),
-					resource.TestCheckResourceAttrSet("data.bitbucket_user.testacc", "account_id"),
+					resource.TestCheckResourceAttr("data.bitbucket_user.testacc", "account_id", user.AccountId),
 				),
 			},
 		},

@@ -39,6 +39,7 @@ func Provider() *schema.Provider {
 			"bitbucket_project":             dataSourceBitbucketProject(),
 			"bitbucket_repository":          dataSourceBitbucketRepository(),
 			"bitbucket_user":                dataSourceBitbucketUser(),
+			"bitbucket_user_workspace":      dataSourceBitbucketUserWorkspace(),
 			"bitbucket_webhook":             dataSourceBitbucketWebhook(),
 			"bitbucket_workspace":           dataSourceBitbucketWorkspace(),
 		},
@@ -72,6 +73,8 @@ func configureProvider(ctx context.Context, resourceData *schema.ResourceData) (
 		resourceData.Get("username").(string),
 		resourceData.Get("password").(string),
 	)
+	client.Pagelen = 100
+	client.MaxDepth = 10
 
 	v1Client := v1.NewClient(
 		&v1.Auth{

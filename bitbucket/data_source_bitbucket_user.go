@@ -9,6 +9,7 @@ import (
 )
 
 func dataSourceBitbucketUser() *schema.Resource {
+	// Any changes made here must be made to `dataSourceBitbucketUserWorkspace`
 	return &schema.Resource{
 		ReadContext: dataSourceBitbucketUserRead,
 		Schema: map[string]*schema.Schema{
