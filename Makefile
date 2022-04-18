@@ -26,3 +26,6 @@ testacc:
 
 clean:
 	rm -f "$(shell go env GOPATH)/bin/$(BINARY)"
+
+updatedeps:
+	go get -u && go mod tidy
