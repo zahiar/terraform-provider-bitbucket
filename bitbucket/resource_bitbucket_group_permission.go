@@ -8,8 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
-
-	v1 "github.com/zahiar/terraform-provider-bitbucket/bitbucket/api/v1"
+	"github.com/ktrysmt/go-bitbucket"
 )
 
 func resourceBitbucketGroupPermission() *schema.Resource {
@@ -57,17 +56,15 @@ func resourceBitbucketGroupPermission() *schema.Resource {
 }
 
 func resourceBitbucketGroupPermissionCreate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*Clients).V1
+	client := meta.(*Clients).V2
 
-	_, err := client.GroupPrivileges.Create(
-		&v1.GroupPrivilegeOptions{
-			WorkspaceId: resourceData.Get("workspace").(string),
-			RepoSlug:    resourceData.Get("repository").(string),
-			GroupOwner:  resourceData.Get("workspace").(string),
-			GroupSlug:   resourceData.Get("group").(string),
-			Privilege:   resourceData.Get("permission").(string),
-		},
-	)
+	_, err := client.Repositories.Repository.SetGroupPermissions(&bitbucket.RepositoryGroupPermissionsOptions{
+		Owner:      resourceData.Get("workspace").(string),
+		RepoSlug:   resourceData.Get("repository").(string),
+		Group:      resourceData.Get("group").(string),
+		Permission: resourceData.Get("permission").(string),
+	})
+
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to create group permission with error: %s", err))
 	}
@@ -76,41 +73,39 @@ func resourceBitbucketGroupPermissionCreate(ctx context.Context, resourceData *s
 }
 
 func resourceBitbucketGroupPermissionRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*Clients).V1
+	client := meta.(*Clients).V2
 
-	groupPermission, err := client.GroupPrivileges.Get(
-		&v1.GroupPrivilegeOptions{
-			WorkspaceId: resourceData.Get("workspace").(string),
-			RepoSlug:    resourceData.Get("repository").(string),
-			GroupOwner:  resourceData.Get("workspace").(string),
-			GroupSlug:   resourceData.Get("group").(string),
-		},
-	)
+	workspace := resourceData.Get("workspace").(string)
+	repository := resourceData.Get("repository").(string)
+
+	groupPermission, err := client.Repositories.Repository.GetGroupPermissions(&bitbucket.RepositoryGroupPermissionsOptions{
+		Owner:      workspace,
+		RepoSlug:   repository,
+		Group:      resourceData.Get("group").(string),
+		Permission: resourceData.Get("permission").(string),
+	})
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to get group permission with error: %s", err))
 	}
 
-	_ = resourceData.Set("workspace", groupPermission.Group.Owner.Uuid)
-	_ = resourceData.Set("repository", groupPermission.Repository.Slug)
 	_ = resourceData.Set("group", groupPermission.Group.Slug)
-	_ = resourceData.Set("permission", groupPermission.Privilege)
+	_ = resourceData.Set("permission", groupPermission.Permission)
 
-	resourceData.SetId(generateGroupPermissionResourceId(groupPermission.Group.Owner.Uuid, groupPermission.Repository.Slug, groupPermission.Group.Slug))
+	resourceData.SetId(generateGroupPermissionResourceId(workspace, repository, groupPermission.Group.Slug))
 
 	return nil
 }
 
 func resourceBitbucketGroupPermissionDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*Clients).V1
+	client := meta.(*Clients).V2
 
-	err := client.GroupPrivileges.Delete(
-		&v1.GroupPrivilegeOptions{
-			WorkspaceId: resourceData.Get("workspace").(string),
-			RepoSlug:    resourceData.Get("repository").(string),
-			GroupOwner:  resourceData.Get("workspace").(string),
-			GroupSlug:   resourceData.Get("group").(string),
-		},
-	)
+	_, err := client.Repositories.Repository.DeleteGroupPermissions(&bitbucket.RepositoryGroupPermissionsOptions{
+		Owner:      resourceData.Get("workspace").(string),
+		RepoSlug:   resourceData.Get("repository").(string),
+		Group:      resourceData.Get("group").(string),
+		Permission: resourceData.Get("permission").(string),
+	})
+
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to delete group permission with error: %s", err))
 	}
