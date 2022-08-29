@@ -50,14 +50,21 @@ $ make test
 ```
 
 ### Acceptance Tests
-This will require you to specify two environment variables (`BITBUCKET_USERNAME` & `BITBUCKET_PASSWORD`), as these tests
-will provision actual resources in your account, and it will tear them down afterwards to ensure it leaves your account clean.
+This will require you to specify the following environment variables, as these tests will provision actual resources in
+your account, and it will tear them down afterwards to ensure it leaves your account clean.
+
+You will also require a UUID of another account that is a member of your workspace in order for the `bitbucket_user_permission` 
+tests to run, as Bitbucket's API will reject the account owner's UUID.
+
+* `BITBUCKET_USERNAME` - Username of the account to run the tests against
+* `BITBUCKET_PASSWORD` - Password of the account to run the tests against
+* `BITBUCKET_MEMBER_ACCOUNT_UUID` - Account UUID of the member who is part of your account
 
 **NOTE**: if a test fails, it may leave dangling resources in your account so please bear this in mind.
 
 If you have two-factor authentication enabled, then be sure to set up an [app password](https://support.atlassian.com/bitbucket-cloud/docs/app-passwords/) and use that instead.
 ```shell
-$ BITBUCKET_USERNAME=myUsername BITBUCKET_PASSWORD=myPassword make testacc
+$ BITBUCKET_USERNAME=myUsername BITBUCKET_PASSWORD=myPassword BITBUCKET_MEMBER_ACCOUNT_UUID=myMemberUUID make testacc
 ```
 
 ### Documentation

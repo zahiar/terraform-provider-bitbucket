@@ -31,3 +31,4 @@ jobs:
         env:
           BITBUCKET_USERNAME: ${{ secrets.BITBUCKET_USERNAME }}
           BITBUCKET_PASSWORD: ${{ secrets.BITBUCKET_PASSWORD }}
+          BITBUCKET_MEMBER_ACCOUNT_UUID: ${{ secrets.BITBUCKET_MEMBER_ACCOUNT_UUID }}

@@ -39,6 +39,7 @@ func Provider() *schema.Provider {
 			"bitbucket_project":             dataSourceBitbucketProject(),
 			"bitbucket_repository":          dataSourceBitbucketRepository(),
 			"bitbucket_user":                dataSourceBitbucketUser(),
+			"bitbucket_user_permission":     dataSourceBitbucketUserPermission(),
 			"bitbucket_user_workspace":      dataSourceBitbucketUserWorkspace(),
 			"bitbucket_webhook":             dataSourceBitbucketWebhook(),
 			"bitbucket_workspace":           dataSourceBitbucketWorkspace(),
@@ -56,6 +57,7 @@ func Provider() *schema.Provider {
 			"bitbucket_pipeline_variable":   resourceBitbucketPipelineVariable(),
 			"bitbucket_project":             resourceBitbucketProject(),
 			"bitbucket_repository":          resourceBitbucketRepository(),
+			"bitbucket_user_permission":     resourceBitbucketUserPermission(),
 			"bitbucket_webhook":             resourceBitbucketWebhook(),
 		},
 
