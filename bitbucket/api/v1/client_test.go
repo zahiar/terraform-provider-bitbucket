@@ -17,6 +17,5 @@ func TestNewClient(t *testing.T) {
 	assert.Equal(t, "https://api.bitbucket.org/1.0", client.ApiBaseUrl.String())
 	assert.Equal(t, auth, client.Auth)
 	assert.IsType(t, &Groups{}, client.Groups)
-	assert.IsType(t, &GroupPrivileges{}, client.GroupPrivileges)
 	assert.IsType(t, &http.Client{}, client.HttpClient)
 }

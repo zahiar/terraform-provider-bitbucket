@@ -12,9 +12,8 @@ type Client struct {
 	ApiBaseUrl *url.URL
 	HttpClient *http.Client
 
-	Groups          *Groups
-	GroupMembers    *GroupMembers
-	GroupPrivileges *GroupPrivileges
+	Groups       *Groups
+	GroupMembers *GroupMembers
 }
 
 type Auth struct {
@@ -34,7 +33,6 @@ func NewClient(auth *Auth) *Client {
 	}
 	client.Groups = &Groups{client: client}
 	client.GroupMembers = &GroupMembers{client: client}
-	client.GroupPrivileges = &GroupPrivileges{client: client}
 	client.HttpClient = new(http.Client)
 
 	return client
