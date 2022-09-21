@@ -39,6 +39,11 @@ func dataSourceBitbucketProject() *schema.Resource {
 				Type:        schema.TypeBool,
 				Computed:    true,
 			},
+			"has_wiki": {
+				Description: "A boolean to state if the project includes a wiki or not.",
+				Type:        schema.TypeBool,
+				Computed:    true,
+			},
 		},
 	}
 }

@@ -58,6 +58,12 @@ func resourceBitbucketRepository() *schema.Resource {
 				Optional:    true,
 				Default:     true,
 			},
+			"has_wiki": {
+				Description: "A boolean to state if the project includes a wiki or not.",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+			},
 			"fork_policy": {
 				Description:  "The name of the fork policy to apply to this repository.",
 				Type:         schema.TypeString,
@@ -88,6 +94,7 @@ func resourceBitbucketRepositoryCreate(ctx context.Context, resourceData *schema
 			Description: resourceData.Get("description").(string),
 			Project:     resourceData.Get("project_key").(string),
 			IsPrivate:   strconv.FormatBool(resourceData.Get("is_private").(bool)),
+			HasWiki:     strconv.FormatBool(resourceData.Get("has_wiki").(bool)),
 			ForkPolicy:  resourceData.Get("fork_policy").(string),
 		},
 	)
@@ -164,6 +171,7 @@ func resourceBitbucketRepositoryUpdate(ctx context.Context, resourceData *schema
 			Description: resourceData.Get("description").(string),
 			Project:     resourceData.Get("project_key").(string),
 			IsPrivate:   strconv.FormatBool(resourceData.Get("is_private").(bool)),
+			HasWiki:     strconv.FormatBool(resourceData.Get("has_wiki").(bool)),
 			ForkPolicy:  resourceData.Get("fork_policy").(string),
 		},
 	)

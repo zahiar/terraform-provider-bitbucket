@@ -9,6 +9,7 @@ resource "bitbucket_repository" "example" {
   project_key      = "EXP"
   description      = "An example repository"
   is_private       = true
+  has_wiki         = true
   fork_policy      = "no_forks"
   enable_pipelines = false
 }
@@ -20,6 +21,7 @@ resource "bitbucket_repository" "example" {
   project_key      = "EXP"
   description      = "An example repository"
   is_private       = true
+  has_wiki         = true
   fork_policy      = "no_forks"
   enable_pipelines = false
 }
@@ -32,6 +34,7 @@ The following arguments are supported:
 * `project_key` - (Required) The key of the project this repository belongs to.
 * `description` - (Optional) The description of the repository. Defaults to empty string.
 * `is_private` - (Optional) A boolean to state if the repository is private or not. Defaults to `true`.
+* `has_wiki` - (Optional) A boolean to state if the repository wiki is enabled not. Defaults to `false`.
 * `fork_policy` - (Optional) The name of the fork policy to apply to this repository. Defaults to `no_forks`. Only applies if `is_private` is set to `true`.
 * `enable_pipelines` - (Optional) A boolean to state if pipelines have been enabled for this repository. Defaults to `false`.
 
