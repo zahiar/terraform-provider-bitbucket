@@ -39,6 +39,11 @@ func dataSourceBitbucketRepository() *schema.Resource {
 				Type:        schema.TypeBool,
 				Computed:    true,
 			},
+			"has_wiki": {
+				Description: "A boolean to state if the repository includes a wiki or not.",
+				Type:        schema.TypeBool,
+				Computed:    true,
+			},
 			"fork_policy": {
 				Description: "The name of the fork policy to apply to this repository.",
 				Type:        schema.TypeString,
