@@ -54,6 +54,7 @@ func Provider() *schema.Provider {
 			"bitbucket_group":               resourceBitbucketGroup(),
 			"bitbucket_group_member":        resourceBitbucketGroupMember(),
 			"bitbucket_group_permission":    resourceBitbucketGroupPermission(),
+			"bitbucket_pipeline_key_pair":   resourceBitbucketPipelineKeyPair(),
 			"bitbucket_pipeline_variable":   resourceBitbucketPipelineVariable(),
 			"bitbucket_project":             resourceBitbucketProject(),
 			"bitbucket_repository":          resourceBitbucketRepository(),
