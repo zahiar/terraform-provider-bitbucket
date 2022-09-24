@@ -28,12 +28,10 @@ func TestAccBitbucketGroupResource_basic(t *testing.T) {
 					resource "bitbucket_group" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.uuid
 					  name       = "%s"
-					  auto_add   = true
 					  permission = "read"
 					}`, workspaceSlug, groupName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "name", groupName),
-					resource.TestCheckResourceAttr("bitbucket_group.testacc", "auto_add", "true"),
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "permission", "read"),
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "slug", groupName),
 
@@ -73,12 +71,10 @@ func TestAccBitbucketGroupResource_changeName(t *testing.T) {
 					resource "bitbucket_group" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.uuid
 					  name       = "%s"
-					  auto_add   = true
 					  permission = "read"
 					}`, workspaceSlug, groupName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "name", groupName),
-					resource.TestCheckResourceAttr("bitbucket_group.testacc", "auto_add", "true"),
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "permission", "read"),
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "slug", groupName),
 
@@ -95,12 +91,10 @@ func TestAccBitbucketGroupResource_changeName(t *testing.T) {
 					resource "bitbucket_group" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.uuid
 					  name       = "%s"
-					  auto_add   = true
 					  permission = "read"
 					}`, workspaceSlug, newGroupName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "name", newGroupName),
-					resource.TestCheckResourceAttr("bitbucket_group.testacc", "auto_add", "true"),
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "permission", "read"),
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "slug", newGroupName),
 
@@ -139,12 +133,10 @@ func TestAccBitbucketGroupResource_changeProperties(t *testing.T) {
 					resource "bitbucket_group" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.uuid
 					  name       = "%s"
-					  auto_add   = true
 					  permission = "read"
 					}`, workspaceSlug, groupName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "name", groupName),
-					resource.TestCheckResourceAttr("bitbucket_group.testacc", "auto_add", "true"),
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "permission", "read"),
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "slug", groupName),
 
@@ -161,12 +153,10 @@ func TestAccBitbucketGroupResource_changeProperties(t *testing.T) {
 					resource "bitbucket_group" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.uuid
 					  name       = "%s"
-					  auto_add   = false
 					  permission = "write"
 					}`, workspaceSlug, groupName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "name", groupName),
-					resource.TestCheckResourceAttr("bitbucket_group.testacc", "auto_add", "false"),
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "permission", "write"),
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "slug", groupName),
 
@@ -208,8 +198,7 @@ func TestAccBitbucketGroupResource_withoutProperties(t *testing.T) {
 					}`, workspaceSlug, groupName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "name", groupName),
-					resource.TestCheckResourceAttr("bitbucket_group.testacc", "auto_add", "false"),
-					resource.TestCheckResourceAttr("bitbucket_group.testacc", "permission", ""),
+					resource.TestCheckResourceAttr("bitbucket_group.testacc", "permission", "none"),
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "slug", groupName),
 
 					resource.TestCheckResourceAttrSet("bitbucket_group.testacc", "workspace"),
@@ -225,12 +214,10 @@ func TestAccBitbucketGroupResource_withoutProperties(t *testing.T) {
 					resource "bitbucket_group" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.uuid
 					  name       = "%s"
-					  auto_add   = true
 					  permission = "write"
 					}`, workspaceSlug, groupName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "name", groupName),
-					resource.TestCheckResourceAttr("bitbucket_group.testacc", "auto_add", "true"),
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "permission", "write"),
 					resource.TestCheckResourceAttr("bitbucket_group.testacc", "slug", groupName),
 

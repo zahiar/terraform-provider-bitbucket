@@ -18,5 +18,4 @@ The following arguments are supported:
 In addition to the arguments above, the following additional attributes are exported:
 * `id` - The ID of the group.
 * `name` - A human-readable name of the group.
-* `auto_add` - A boolean to state whether this group is auto-added to all future repositories.
-* `permission` - The permission this group will have over repositories. Is one of 'read', 'write', or 'admin'.
+* `permission` - The global permission this group will have over all repositories. Is one of 'none', 'read', 'write', 'admin'.
