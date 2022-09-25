@@ -26,7 +26,6 @@ func TestAccBitbucketGroupDataSource_basic(t *testing.T) {
 					resource "bitbucket_group" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.id
 					  name       = "%s"
-					  auto_add   = true
 					  permission = "read"
 					}
 	
@@ -37,7 +36,6 @@ func TestAccBitbucketGroupDataSource_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.bitbucket_group.testacc", "workspace", workspaceSlug),
 					resource.TestCheckResourceAttr("data.bitbucket_group.testacc", "name", groupName),
-					resource.TestCheckResourceAttr("data.bitbucket_group.testacc", "auto_add", "true"),
 					resource.TestCheckResourceAttr("data.bitbucket_group.testacc", "permission", "read"),
 					resource.TestCheckResourceAttr("data.bitbucket_group.testacc", "slug", groupName),
 					resource.TestCheckResourceAttrSet("data.bitbucket_group.testacc", "id"),

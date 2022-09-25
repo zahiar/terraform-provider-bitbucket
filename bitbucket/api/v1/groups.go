@@ -19,7 +19,6 @@ type Group struct {
 		Uuid string `json:"uuid"`
 	}
 	Name       string `json:"name"`
-	AutoAdd    bool   `json:"auto_add"`
 	Slug       string `json:"slug"`
 	Permission string `json:"permission"`
 }
@@ -27,7 +26,6 @@ type Group struct {
 type GroupOptions struct {
 	OwnerUuid  string
 	Name       string
-	AutoAdd    bool
 	Slug       string
 	Permission string
 }
@@ -61,6 +59,10 @@ func (g *Groups) Get(gro *GroupOptions) (*Group, error) {
 		return nil, fmt.Errorf("no group found")
 	}
 
+	if result[0].Permission == "" {
+		result[0].Permission = "none"
+	}
+
 	return &result[0], nil
 }
 
@@ -92,20 +94,27 @@ func (g *Groups) Create(gro *GroupOptions) (*Group, error) {
 		return nil, err
 	}
 
+	if result.Permission == "" {
+		result.Permission = "none"
+	}
+
 	return result, nil
 }
 
 func (g *Groups) Update(gro *GroupOptions) (*Group, error) {
 	url := fmt.Sprintf("%s/groups/%s/%s", g.client.ApiBaseUrl, gro.OwnerUuid, gro.Slug)
 
+	groupPermission := &gro.Permission
+	if *groupPermission == "none" {
+		groupPermission = nil
+	}
+
 	requestBody := struct {
-		Name       string `json:"name,omitempty"`
-		AutoAdd    bool   `json:"auto_add,omitempty"`
-		Permission string `json:"permission,omitempty"`
+		Name       string  `json:"name,omitempty"`
+		Permission *string `json:"permission"`
 	}{
 		Name:       gro.Name,
-		AutoAdd:    gro.AutoAdd,
-		Permission: gro.Permission,
+		Permission: groupPermission,
 	}
 	requestBodyJson, err := json.Marshal(requestBody)
 	if err != nil {

@@ -28,11 +28,6 @@ func dataSourceBitbucketGroup() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
-			"auto_add": {
-				Description: "Whether this group is auto-added to all future repositories.",
-				Type:        schema.TypeBool,
-				Computed:    true,
-			},
 			"permission": {
 				Description: "The permission this group will have over repositories. Must be one of 'read', 'write', 'admin'.",
 				Type:        schema.TypeString,

@@ -6,7 +6,6 @@ Manage a group within Bitbucket.
 resource "bitbucket_group" "example" {
   workspace  = "{workspace-uuid}"
   name       = "Example Group"
-  auto_add   = false
   permission = "read"
 }
 ```
@@ -15,8 +14,7 @@ resource "bitbucket_group" "example" {
 The following arguments are supported:
 * `workspace` - (Required) The UUID (including the enclosing `{}`) of the workspace the group belongs to.
 * `name` - (Required) A human-readable name of the group.
-* `auto_add` - (Optional) A boolean to state whether this group is auto-added to all future repositories.
-* `permission` - (Optional) The permission this group will have over repositories. Is one of 'read', 'write', or 'admin'.
+* `permission` - (Optional) The global permission this group will have over all repositories. Must be one of 'none', 'read', 'write', 'admin'.
 
 ## Attribute Reference
 In addition to the arguments above, the following additional attributes are exported:

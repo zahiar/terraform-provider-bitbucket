@@ -31,8 +31,7 @@ func TestGroups(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.Equal(t, name, group.Name)
-		assert.False(t, group.AutoAdd)
-		assert.Empty(t, group.Permission)
+		assert.Equal(t, "none", group.Permission)
 
 		groupResourceSlug = group.Slug
 	})
@@ -46,8 +45,7 @@ func TestGroups(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.Equal(t, name, group.Name)
-		assert.False(t, group.AutoAdd)
-		assert.Empty(t, group.Permission)
+		assert.Equal(t, "none", group.Permission)
 		assert.Equal(t, groupResourceSlug, group.Slug)
 	})
 
@@ -55,14 +53,12 @@ func TestGroups(t *testing.T) {
 		opt := &GroupOptions{
 			OwnerUuid:  c.Auth.Username,
 			Slug:       groupResourceSlug,
-			AutoAdd:    true,
 			Permission: "write",
 		}
 		group, err := c.Groups.Update(opt)
 
 		assert.NoError(t, err)
 		assert.Equal(t, name, group.Name)
-		assert.True(t, group.AutoAdd)
 		assert.Equal(t, "write", group.Permission)
 		assert.Equal(t, groupResourceSlug, group.Slug)
 	})
@@ -101,8 +97,7 @@ func TestGroupsGracefullyHandleNoReturnedGroupsForInvalidSlug(t *testing.T) {
 		assert.NoError(t, err)
 
 		assert.Equal(t, name, group.Name)
-		assert.False(t, group.AutoAdd)
-		assert.Empty(t, group.Permission)
+		assert.Equal(t, "none", group.Permission)
 
 		groupResourceSlug = group.Slug
 	})

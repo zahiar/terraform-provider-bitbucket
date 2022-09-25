@@ -47,7 +47,7 @@ func TestAccBitbucketRepositoryResource_basic(t *testing.T) {
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "project_key", projectKey),
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "description", ""),
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "is_private", "true"),
-					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "has_wiki", "true"),
+					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "has_wiki", "false"),
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "fork_policy", "no_forks"),
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "enable_pipelines", "false"),
 					resource.TestCheckResourceAttrSet("bitbucket_repository.testacc", "id"),
@@ -78,7 +78,7 @@ func TestAccBitbucketRepositoryResource_basic(t *testing.T) {
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "project_key", projectKey),
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "description", repoDescription),
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "is_private", "true"),
-					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "has_wiki", "true"),
+					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "has_wiki", "false"),
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "fork_policy", repoForkPolicy),
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "enable_pipelines", "false"),
 					resource.TestCheckResourceAttrSet("bitbucket_repository.testacc", "id"),
@@ -103,6 +103,7 @@ func TestAccBitbucketRepositoryResource_basic(t *testing.T) {
 					  description      = "%s"
 					  fork_policy      = "%s"
 					  enable_pipelines = true
+					  has_wiki         = true
 					}`, workspaceSlug, projectName, projectKey, repoName, repoDescription, repoForkPolicy),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "workspace", workspaceSlug),
@@ -133,7 +134,7 @@ func TestValidateRepositoryName(t *testing.T) {
 	validator := validateRepositoryName(invalidName, nil)
 	assert.True(t, validator.HasError())
 
-	validNames := []string{"abc-def","foo.bar"}
+	validNames := []string{"abc-def", "foo.bar"}
 
 	for _, validName := range validNames {
 		validator = validateRepositoryName(validName, nil)

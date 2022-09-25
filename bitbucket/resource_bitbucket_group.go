@@ -42,17 +42,12 @@ func resourceBitbucketGroup() *schema.Resource {
 				Type:        schema.TypeString,
 				Computed:    true,
 			},
-			"auto_add": {
-				Description: "Whether this group is auto-added to all future repositories.",
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
-			},
 			"permission": {
-				Description:  "The permission this group will have over repositories. Must be one of 'read', 'write', 'admin'.",
+				Description:  "The global permission this group will have over all repositories. Must be one of 'none', 'read', 'write', 'admin'.",
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: validation.StringInSlice([]string{"read", "write", "admin"}, false),
+				Default:      "none",
+				ValidateFunc: validation.StringInSlice([]string{"none", "read", "write", "admin"}, false),
 			},
 		},
 	}
@@ -73,7 +68,7 @@ func resourceBitbucketGroupCreate(ctx context.Context, resourceData *schema.Reso
 
 	_ = resourceData.Set("slug", group.Slug)
 
-	// We do an update as well, as that's where the other options like auto-add/permissions are set.
+	// We do an update as well, as that's where the other options like permissions are set.
 	// The POST endpoint only accepts a name, and just creates a group without setting any other options.
 	return resourceBitbucketGroupUpdate(ctx, resourceData, meta)
 }
@@ -92,7 +87,6 @@ func resourceBitbucketGroupRead(ctx context.Context, resourceData *schema.Resour
 	}
 
 	_ = resourceData.Set("name", group.Name)
-	_ = resourceData.Set("auto_add", group.AutoAdd)
 	_ = resourceData.Set("permission", group.Permission)
 
 	resourceData.SetId(generateGroupResourceId(group.Owner.Uuid, group.Slug))
@@ -108,7 +102,6 @@ func resourceBitbucketGroupUpdate(ctx context.Context, resourceData *schema.Reso
 			OwnerUuid:  resourceData.Get("workspace").(string),
 			Slug:       resourceData.Get("slug").(string),
 			Name:       resourceData.Get("name").(string),
-			AutoAdd:    resourceData.Get("auto_add").(bool),
 			Permission: resourceData.Get("permission").(string),
 		},
 	)
