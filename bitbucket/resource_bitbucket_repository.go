@@ -3,6 +3,7 @@ package bitbucket
 import (
 	"context"
 	"fmt"
+	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -121,14 +122,17 @@ func resourceBitbucketRepositoryCreate(ctx context.Context, resourceData *schema
 func resourceBitbucketRepositoryRead(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*Clients).V2
 
-	repository, err := client.Repositories.Repository.Get(
-		&gobb.RepositoryOptions{
-			Owner:    resourceData.Get("workspace").(string),
-			RepoSlug: resourceData.Get("name").(string),
-		},
-	)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("unable to get repository with error: %s", err))
+	workspace := resourceData.Get("workspace").(string)
+
+	if len(repositoriesCache[workspace]) == 0 {
+		if err := warmUpRepositoriesCacheInTheWorkspace(client, workspace); err != nil {
+			return diag.FromErr(fmt.Errorf("unable to get repositories with error: %s", err))
+		}
+	}
+
+	repository := repositoriesCache[workspace][resourceData.Get("name").(string)]
+	if reflect.DeepEqual(repository, gobb.Repository{}) {
+		return diag.FromErr(fmt.Errorf("repository does not exist or was removed without using provider"))
 	}
 
 	_ = resourceData.Set("description", repository.Description)
@@ -235,4 +239,21 @@ func validateRepositoryName(val interface{}, path cty.Path) diag.Diagnostics {
 	}
 
 	return diag.Diagnostics{}
+}
+
+var repositoriesCache map[string]map[string]gobb.Repository
+
+func warmUpRepositoriesCacheInTheWorkspace(client *gobb.Client, workspace string) error {
+	repositories, err := client.Repositories.ListForAccount(&gobb.RepositoriesOptions{Owner: workspace})
+	if err != nil {
+		return err
+	}
+
+	tempRepositories := make(map[string]gobb.Repository)
+	for _, item := range repositories.Items {
+		tempRepositories[item.Slug] = item
+	}
+	repositoriesCache[workspace] = tempRepositories
+
+	return nil
 }
