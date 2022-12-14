@@ -241,7 +241,7 @@ func validateRepositoryName(val interface{}, path cty.Path) diag.Diagnostics {
 	return diag.Diagnostics{}
 }
 
-var repositoriesCache map[string]map[string]gobb.Repository
+var repositoriesCache = make(map[string]map[string]gobb.Repository)
 
 func warmUpRepositoriesCacheInTheWorkspace(client *gobb.Client, workspace string) error {
 	repositories, err := client.Repositories.ListForAccount(&gobb.RepositoriesOptions{Owner: workspace})

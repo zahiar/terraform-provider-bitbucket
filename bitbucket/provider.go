@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	gobb "github.com/ktrysmt/go-bitbucket"
 
-	v1 "github.com/zahiar/terraform-provider-bitbucket/bitbucket/api/v1"
+	v1 "github.com/brnck/terraform-provider-bitbucket/bitbucket/api/v1"
 )
 
 func Provider() *schema.Provider {
