@@ -88,9 +88,11 @@ func resourceBitbucketRepository() *schema.Resource {
 func resourceBitbucketRepositoryCreate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*Clients).V2
 
+	workspace := resourceData.Get("workspace").(string)
+
 	repository, err := client.Repositories.Repository.Create(
 		&gobb.RepositoryOptions{
-			Owner:       resourceData.Get("workspace").(string),
+			Owner:       workspace,
 			RepoSlug:    resourceData.Get("name").(string),
 			Description: resourceData.Get("description").(string),
 			Project:     resourceData.Get("project_key").(string),
@@ -107,13 +109,19 @@ func resourceBitbucketRepositoryCreate(ctx context.Context, resourceData *schema
 
 	_, err = client.Repositories.Repository.UpdatePipelineConfig(
 		&gobb.RepositoryPipelineOptions{
-			Owner:    resourceData.Get("workspace").(string),
+			Owner:    workspace,
 			RepoSlug: resourceData.Get("name").(string),
 			Enabled:  resourceData.Get("enable_pipelines").(bool),
 		},
 	)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to enable pipelines for repository with error: %s", err))
+	}
+
+	// If cache has been warmed up, we need to add entry to the list to ensure repo presence is known
+	// during runtime
+	if len(repositoriesCache[workspace]) != 0 {
+		repositoriesCache[workspace][repository.Slug] = *repository
 	}
 
 	return resourceBitbucketRepositoryRead(ctx, resourceData, meta)
@@ -168,10 +176,12 @@ func resourceBitbucketRepositoryRead(ctx context.Context, resourceData *schema.R
 func resourceBitbucketRepositoryUpdate(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*Clients).V2
 
-	_, err := client.Repositories.Repository.Update(
+	workspace := resourceData.Get("workspace").(string)
+
+	repository, err := client.Repositories.Repository.Update(
 		&gobb.RepositoryOptions{
 			Uuid:        resourceData.Id(),
-			Owner:       resourceData.Get("workspace").(string),
+			Owner:       workspace,
 			RepoSlug:    resourceData.Get("name").(string),
 			Description: resourceData.Get("description").(string),
 			Project:     resourceData.Get("project_key").(string),
@@ -186,7 +196,7 @@ func resourceBitbucketRepositoryUpdate(ctx context.Context, resourceData *schema
 
 	_, err = client.Repositories.Repository.UpdatePipelineConfig(
 		&gobb.RepositoryPipelineOptions{
-			Owner:    resourceData.Get("workspace").(string),
+			Owner:    workspace,
 			RepoSlug: resourceData.Get("name").(string),
 			Enabled:  resourceData.Get("enable_pipelines").(bool),
 		},
@@ -195,16 +205,25 @@ func resourceBitbucketRepositoryUpdate(ctx context.Context, resourceData *schema
 		return diag.FromErr(fmt.Errorf("unable to update pipeline configuration for repository with error: %s", err))
 	}
 
+	// If cache has been warmed up, we need to update entry in the list to ensure repo current state is known
+	// during runtime
+	if len(repositoriesCache[workspace]) != 0 {
+		repositoriesCache[workspace][repository.Slug] = *repository
+	}
+
 	return resourceBitbucketRepositoryRead(ctx, resourceData, meta)
 }
 
 func resourceBitbucketRepositoryDelete(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*Clients).V2
 
+	workspace := resourceData.Get("workspace").(string)
+	repoSlug := resourceData.Get("name").(string)
+
 	_, err := client.Repositories.Repository.Delete(
 		&gobb.RepositoryOptions{
-			Owner:    resourceData.Get("workspace").(string),
-			RepoSlug: resourceData.Get("name").(string),
+			Owner:    workspace,
+			RepoSlug: repoSlug,
 		},
 	)
 	if err != nil {
@@ -212,6 +231,11 @@ func resourceBitbucketRepositoryDelete(ctx context.Context, resourceData *schema
 	}
 
 	resourceData.SetId("")
+
+	// If cache has been warmed up, we need to remove entry from the list
+	if len(repositoriesCache[workspace]) != 0 {
+		delete(repositoriesCache[workspace], repoSlug)
+	}
 
 	return nil
 }
