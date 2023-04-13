@@ -48,6 +48,7 @@ func resourceBitbucketPipelineVariable() *schema.Resource {
 				Description: "The value of the variable.",
 				Type:        schema.TypeString,
 				Required:    true,
+				Sensitive:   true,
 			},
 			"secured": {
 				Description: "Whether this variable is considered secure/sensitive. If true, then it's value will not be exposed in any logs or API requests.",

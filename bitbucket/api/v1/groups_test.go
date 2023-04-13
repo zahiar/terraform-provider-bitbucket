@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,7 +20,7 @@ func TestGroups(t *testing.T) {
 
 	var groupResourceSlug string
 
-	name := "tf-bb-group-test"
+	name := "tf-bb-group-test" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 
 	t.Run("create", func(t *testing.T) {
 		opt := &GroupOptions{

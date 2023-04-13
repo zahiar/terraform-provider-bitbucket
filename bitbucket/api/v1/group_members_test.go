@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,7 +24,7 @@ func TestGroupMembers(t *testing.T) {
 		group, _ = c.Groups.Create(
 			&GroupOptions{
 				OwnerUuid: c.Auth.Username,
-				Name:      "tf-bb-group-members-test",
+				Name:      "tf-bb-group-members-test" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum),
 			},
 		)
 		assert.NotNil(t, group, "The Group could not be created")
