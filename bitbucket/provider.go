@@ -35,6 +35,7 @@ func Provider() *schema.Provider {
 			"bitbucket_deployment_variable": dataSourceBitbucketDeploymentVariable(),
 			"bitbucket_group":               dataSourceBitbucketGroup(),
 			"bitbucket_group_permission":    dataSourceBitbucketGroupPermission(),
+			"bitbucket_ip_ranges":           dataSourceBitbucketIpRanges(),
 			"bitbucket_pipeline_variable":   dataSourceBitbucketPipelineVariable(),
 			"bitbucket_project":             dataSourceBitbucketProject(),
 			"bitbucket_repository":          dataSourceBitbucketRepository(),
