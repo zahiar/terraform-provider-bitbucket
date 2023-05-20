@@ -85,6 +85,7 @@ func TestAccBitbucketRepositoryDataSource_basic(t *testing.T) {
 					  has_wiki         = true
 					  fork_policy      = "no_forks"
 					  enable_pipelines = true
+                      language         = "go"
 					}
 	
 					data "bitbucket_repository" "testacc" {
@@ -101,7 +102,7 @@ func TestAccBitbucketRepositoryDataSource_basic(t *testing.T) {
 					resource.TestCheckResourceAttr("data.bitbucket_repository.testacc", "has_wiki", "true"),
 					resource.TestCheckResourceAttr("data.bitbucket_repository.testacc", "fork_policy", "no_forks"),
 					resource.TestCheckResourceAttr("data.bitbucket_repository.testacc", "enable_pipelines", "true"),
-					resource.TestCheckResourceAttr("data.bitbucket_repository.testacc", "language", ""),
+					resource.TestCheckResourceAttr("data.bitbucket_repository.testacc", "language", "go"),
 					resource.TestCheckResourceAttrSet("data.bitbucket_repository.testacc", "id"),
 				),
 			},
