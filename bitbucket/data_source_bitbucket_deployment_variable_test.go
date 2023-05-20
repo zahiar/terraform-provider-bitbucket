@@ -129,6 +129,59 @@ func TestAccBitbucketDeploymentVariableDataSource_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet("data.bitbucket_deployment_variable.testacc", "deployment"),
 				),
 			},
+			{
+				Config: fmt.Sprintf(`
+					data "bitbucket_workspace" "testacc" {
+						id = "%s"
+					}
+	
+					resource "bitbucket_project" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  name       = "%s"
+					  key        = "%s"
+					  is_private = true
+					}
+
+					resource "bitbucket_repository" "testacc" {
+					  workspace        = data.bitbucket_workspace.testacc.id
+					  project_key      = bitbucket_project.testacc.key
+					  name             = "%s"
+					  enable_pipelines = true
+					}
+
+					resource "bitbucket_deployment" "testacc" {
+					  workspace   = data.bitbucket_workspace.testacc.id
+					  repository  = bitbucket_repository.testacc.name
+					  name        = "TF ACC Test Deployment"
+					  environment = "Test"
+					}
+
+					resource "bitbucket_deployment_variable" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  repository = bitbucket_repository.testacc.name
+					  deployment = bitbucket_deployment.testacc.id
+					  key        = "%s"
+					  value      = "%s"
+					  secured    = false
+					}
+
+					data "bitbucket_deployment_variable" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  repository = bitbucket_repository.testacc.name
+					  deployment = bitbucket_deployment.testacc.id
+					  key        = bitbucket_deployment_variable.testacc.key
+					}`, workspaceSlug, projectName, projectKey, repoName, "__MY_VARIABLE", deploymentVariableValue),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.bitbucket_deployment_variable.testacc", "workspace", workspaceSlug),
+					resource.TestCheckResourceAttr("data.bitbucket_deployment_variable.testacc", "repository", repoName),
+					resource.TestCheckResourceAttr("data.bitbucket_deployment_variable.testacc", "key", "__MY_VARIABLE"),
+					resource.TestCheckResourceAttr("data.bitbucket_deployment_variable.testacc", "value", deploymentVariableValue),
+					resource.TestCheckResourceAttr("data.bitbucket_deployment_variable.testacc", "secured", "false"),
+
+					resource.TestCheckResourceAttrSet("data.bitbucket_deployment_variable.testacc", "id"),
+					resource.TestCheckResourceAttrSet("data.bitbucket_deployment_variable.testacc", "deployment"),
+				),
+			},
 		},
 	})
 }

@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/hashicorp/go-cty/cty"
+	"regexp"
 	"strings"
 	"time"
 
@@ -47,7 +49,7 @@ func resourceBitbucketDeploymentVariable() *schema.Resource {
 				Description:      "The name of the variable (must consist of only ASCII letters, numbers, underscores & not begin with a number).",
 				Type:             schema.TypeString,
 				Required:         true,
-				ValidateDiagFunc: validateRepositoryVariableName,
+				ValidateDiagFunc: validateDeploymentVariableName,
 			},
 			"value": {
 				Description: "The value of the variable.",
@@ -187,4 +189,13 @@ func resourceBitbucketDeploymentVariableImport(ctx context.Context, resourceData
 	_ = resourceBitbucketDeploymentVariableRead(ctx, resourceData, meta)
 
 	return ret, nil
+}
+
+func validateDeploymentVariableName(val interface{}, path cty.Path) diag.Diagnostics {
+	match, _ := regexp.MatchString("^([a-zA-Z_])[a-zA-Z0-9_]+$", val.(string))
+	if !match {
+		return diag.FromErr(fmt.Errorf("variable name must consist of only ASCII letters, numbers, underscores & not begin with a number (a-z, 0-9, _)"))
+	}
+
+	return diag.Diagnostics{}
 }

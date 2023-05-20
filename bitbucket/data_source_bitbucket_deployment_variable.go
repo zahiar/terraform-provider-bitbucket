@@ -33,7 +33,7 @@ func dataSourceBitbucketDeploymentVariable() *schema.Resource {
 				Description:      "The name of the variable (must consist of only ASCII letters, numbers, underscores & not begin with a number).",
 				Type:             schema.TypeString,
 				Required:         true,
-				ValidateDiagFunc: validateRepositoryVariableName,
+				ValidateDiagFunc: validateDeploymentVariableName,
 			},
 			"value": {
 				Description: "The value of the variable (note: if this variable is marked 'secured', this attribute will be blank).",

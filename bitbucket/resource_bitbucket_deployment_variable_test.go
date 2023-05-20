@@ -2,6 +2,7 @@ package bitbucket
 
 import (
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"os"
 	"strings"
 	"testing"
@@ -115,6 +116,52 @@ func TestAccBitbucketDeploymentVariableResource_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet("bitbucket_deployment_variable.testacc", "deployment"),
 				),
 			},
+			{
+				Config: fmt.Sprintf(`
+					data "bitbucket_workspace" "testacc" {
+						id = "%s"
+					}
+	
+					resource "bitbucket_project" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  name       = "%s"
+					  key        = "%s"
+					  is_private = true
+					}
+
+					resource "bitbucket_repository" "testacc" {
+					  workspace        = data.bitbucket_workspace.testacc.id
+					  project_key      = bitbucket_project.testacc.key
+					  name             = "%s"
+					  enable_pipelines = true
+					}
+
+					resource "bitbucket_deployment" "testacc" {
+					  workspace   = data.bitbucket_workspace.testacc.id
+					  repository  = bitbucket_repository.testacc.name
+					  name        = "TF ACC Test Deployment"
+					  environment = "Test"
+					}
+
+					resource "bitbucket_deployment_variable" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  repository = bitbucket_repository.testacc.name
+					  deployment = bitbucket_deployment.testacc.id
+					  key        = "%s"
+					  value      = "%s"
+					  secured    = false
+					}`, workspaceSlug, projectName, projectKey, repoName, "__MY_VARIABLE123", deploymentVariableValue),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("bitbucket_deployment_variable.testacc", "workspace", workspaceSlug),
+					resource.TestCheckResourceAttr("bitbucket_deployment_variable.testacc", "repository", repoName),
+					resource.TestCheckResourceAttr("bitbucket_deployment_variable.testacc", "key", "__MY_VARIABLE123"),
+					resource.TestCheckResourceAttr("bitbucket_deployment_variable.testacc", "value", deploymentVariableValue),
+					resource.TestCheckResourceAttr("bitbucket_deployment_variable.testacc", "secured", "false"),
+
+					resource.TestCheckResourceAttrSet("bitbucket_deployment_variable.testacc", "id"),
+					resource.TestCheckResourceAttrSet("bitbucket_deployment_variable.testacc", "deployment"),
+				),
+			},
 		},
 	})
 }
@@ -214,4 +261,18 @@ func TestAccBitbucketDeploymentVariableResource_multipleVars(t *testing.T) {
 			},
 		},
 	})
+}
+
+func TestValidateDeploymentVariableName(t *testing.T) {
+	invalidNames := []string{"4asdasd", "$£$%$", "AS@£$@£$@", "as-adasd"}
+	for _, name := range invalidNames {
+		validator := validateDeploymentVariableName(name, nil)
+		assert.True(t, validator.HasError())
+	}
+
+	validNames := []string{"adasd", "asds2342432", "asdadsa_asdasd23424242", "Asdfdfsdf", "AsfdsdfSDFDFSf", "___MY_VARIABLE"}
+	for _, name := range validNames {
+		validator := validateDeploymentVariableName(name, nil)
+		assert.False(t, validator.HasError())
+	}
 }
