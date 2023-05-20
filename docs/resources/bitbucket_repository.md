@@ -12,6 +12,7 @@ resource "bitbucket_repository" "example" {
   has_wiki         = true
   fork_policy      = "no_forks"
   enable_pipelines = false
+  language         = "go"
 }
 ```
 ```hcl
@@ -24,6 +25,7 @@ resource "bitbucket_repository" "example" {
   has_wiki         = true
   fork_policy      = "no_forks"
   enable_pipelines = false
+  language         = "go"
 }
 ```
 
@@ -37,6 +39,7 @@ The following arguments are supported:
 * `has_wiki` - (Optional) A boolean to state if the repository includes a wiki or not. Defaults to `false`.
 * `fork_policy` - (Optional) The name of the fork policy to apply to this repository. Defaults to `no_forks`. Only applies if `is_private` is set to `true`.
 * `enable_pipelines` - (Optional) A boolean to state if pipelines have been enabled for this repository. Defaults to `false`.
+* `language` - (Optional) The programming language of the repository. Defaults to empty string.
 
 ## Attribute Reference
 In addition to the arguments above, the following additional attributes are exported:

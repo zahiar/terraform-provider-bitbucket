@@ -29,3 +29,4 @@ In addition to the arguments above, the following additional attributes are expo
 * `has_wiki` - A boolean to state if the repository includes a wiki or not.
 * `fork_policy` - The name of the fork policy set on the repository.
 * `enable_pipelines` - A boolean to state if pipelines have been enabled for this repository.
+* `language` - The programming language of the repository.

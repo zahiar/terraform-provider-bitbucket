@@ -80,6 +80,12 @@ func resourceBitbucketRepository() *schema.Resource {
 				Optional:    true,
 				Default:     false,
 			},
+			"language": {
+				Description: "The language of the repository.",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "",
+			},
 		},
 	}
 }
@@ -96,6 +102,7 @@ func resourceBitbucketRepositoryCreate(ctx context.Context, resourceData *schema
 			IsPrivate:   strconv.FormatBool(resourceData.Get("is_private").(bool)),
 			HasWiki:     strconv.FormatBool(resourceData.Get("has_wiki").(bool)),
 			ForkPolicy:  resourceData.Get("fork_policy").(string),
+			Language:    resourceData.Get("language").(string),
 		},
 	)
 	if err != nil {
@@ -136,6 +143,7 @@ func resourceBitbucketRepositoryRead(ctx context.Context, resourceData *schema.R
 	_ = resourceData.Set("is_private", repository.Is_private)
 	_ = resourceData.Set("has_wiki", repository.Has_wiki)
 	_ = resourceData.Set("fork_policy", repository.Fork_policy)
+	_ = resourceData.Set("language", repository.Language)
 
 	resourceData.SetId(repository.Uuid)
 
@@ -174,6 +182,7 @@ func resourceBitbucketRepositoryUpdate(ctx context.Context, resourceData *schema
 			IsPrivate:   strconv.FormatBool(resourceData.Get("is_private").(bool)),
 			HasWiki:     strconv.FormatBool(resourceData.Get("has_wiki").(bool)),
 			ForkPolicy:  resourceData.Get("fork_policy").(string),
+			Language:    resourceData.Get("language").(string),
 		},
 	)
 	if err != nil {
