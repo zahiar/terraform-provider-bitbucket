@@ -45,6 +45,7 @@ func Provider() *schema.Provider {
 			"bitbucket_webhook":             dataSourceBitbucketWebhook(),
 			"bitbucket_workspace":           dataSourceBitbucketWorkspace(),
 			"bitbucket_workspace_members":   dataSourceBitbucketWorkspaceMembers(),
+			"bitbucket_workspace_projects":  dataSourceBitbucketWorkspaceProjects(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{

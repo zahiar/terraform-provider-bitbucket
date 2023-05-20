@@ -18,7 +18,7 @@ func dataSourceBitbucketWorkspaceMembers() *schema.Resource {
 				Required:    true,
 			},
 			"members": {
-				Description: "List of member UUID's (including the enclosing `{}`).",
+				Description: "List of Members.",
 				Type:        schema.TypeSet,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
