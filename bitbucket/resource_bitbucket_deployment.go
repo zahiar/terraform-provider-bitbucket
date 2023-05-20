@@ -134,11 +134,11 @@ func resourceBitbucketDeploymentReadByName(ctx context.Context, resourceData *sc
 		return diag.FromErr(fmt.Errorf("unable to get deployment variable with error: %s", err))
 	}
 
-	name := resourceData.Get("name")
+	name := resourceData.Get("name").(string)
 
 	var deployment *gobb.Environment
 	for _, item := range deployments.Environments {
-		if item.Name == name.(string) {
+		if strings.EqualFold(item.Name, name) {
 			deployment = &item
 			break
 		}
