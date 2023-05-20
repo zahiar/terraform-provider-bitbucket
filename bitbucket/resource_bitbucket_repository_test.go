@@ -50,7 +50,7 @@ func TestAccBitbucketRepositoryResource_basic(t *testing.T) {
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "has_wiki", "false"),
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "fork_policy", "no_forks"),
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "enable_pipelines", "false"),
-					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "language", "go"),
+					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "language", ""),
 					resource.TestCheckResourceAttrSet("bitbucket_repository.testacc", "id"),
 				),
 			},
@@ -82,7 +82,7 @@ func TestAccBitbucketRepositoryResource_basic(t *testing.T) {
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "has_wiki", "false"),
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "fork_policy", repoForkPolicy),
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "enable_pipelines", "false"),
-					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "language", "go"),
+					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "language", ""),
 					resource.TestCheckResourceAttrSet("bitbucket_repository.testacc", "id"),
 				),
 			},
@@ -106,6 +106,7 @@ func TestAccBitbucketRepositoryResource_basic(t *testing.T) {
 					  fork_policy      = "%s"
 					  enable_pipelines = true
 					  has_wiki         = true
+                      language         = "go"
 					}`, workspaceSlug, projectName, projectKey, repoName, repoDescription, repoForkPolicy),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_repository.testacc", "workspace", workspaceSlug),

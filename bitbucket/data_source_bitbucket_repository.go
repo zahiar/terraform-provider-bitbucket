@@ -54,6 +54,11 @@ func dataSourceBitbucketRepository() *schema.Resource {
 				Type:        schema.TypeBool,
 				Computed:    true,
 			},
+			"language": {
+				Description: "The language of the repository.",
+				Type:        schema.TypeString,
+				Computed:    true,
+			},
 		},
 	}
 }
