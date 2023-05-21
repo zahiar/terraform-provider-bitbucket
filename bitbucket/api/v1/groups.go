@@ -37,7 +37,7 @@ func (g *Groups) Get(gro *GroupOptions) (*Group, error) {
 		return nil, err
 	}
 
-	request.SetBasicAuth(g.client.Auth.Username, g.client.Auth.Password)
+	g.client.Auth.SetRequestAuth(request)
 
 	response, err := g.client.HttpClient.Do(request)
 	if err != nil {
@@ -74,7 +74,7 @@ func (g *Groups) Create(gro *GroupOptions) (*Group, error) {
 		return nil, err
 	}
 
-	request.SetBasicAuth(g.client.Auth.Username, g.client.Auth.Password)
+	g.client.Auth.SetRequestAuth(request)
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	response, err := g.client.HttpClient.Do(request)
@@ -127,7 +127,7 @@ func (g *Groups) Update(gro *GroupOptions) (*Group, error) {
 		return nil, err
 	}
 
-	request.SetBasicAuth(g.client.Auth.Username, g.client.Auth.Password)
+	g.client.Auth.SetRequestAuth(request)
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err := g.client.HttpClient.Do(request)
@@ -157,7 +157,7 @@ func (g *Groups) Delete(gro *GroupOptions) error {
 		return err
 	}
 
-	request.SetBasicAuth(g.client.Auth.Username, g.client.Auth.Password)
+	g.client.Auth.SetRequestAuth(request)
 
 	response, err := g.client.HttpClient.Do(request)
 	if err != nil {

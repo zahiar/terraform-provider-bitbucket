@@ -56,16 +56,17 @@ your account, and it will tear them down afterwards to ensure it leaves your acc
 You will also require a UUID of another account that is a member of your workspace in order for the `bitbucket_user_permission` 
 tests to run, as Bitbucket's API will reject the account owner's UUID.
 
-* `BITBUCKET_USERNAME` - Username of the account to run the tests against
-* `BITBUCKET_PASSWORD` - Password of the account to run the tests against
+* `BITBUCKET_USERNAME` - Username of the account to run the tests against. Even if `BITBUCKET_AUTH_METHOD` is set to `oauth`, this is still required, as this value is also used as the workspace name.
+* `BITBUCKET_PASSWORD` - App Password of the account to run the tests against. Don't set if `BITBUCKET_AUTH_METHOD` is set to `oauth`.
 * `BITBUCKET_MEMBER_ACCOUNT_UUID` - Account UUID of the member who is part of your account
+* `BITBUCKET_OAUTH_CLIENT_ID` - The "Key" from an [OAuth consumer](https://support.atlassian.com/bitbucket-cloud/docs/use-oauth-on-bitbucket-cloud/). Make sure to mark it as private.
+* `BITBUCKET_OAUTH_CLIENT_SECRET` - The "Secret" from the OAuth consumer.
+* `BITBUCKET_AUTH_METHOD` - If set to `oauth`, it will use the OAuth credentials for all operations, otherwise the username and password. In any case, the OAuth credentials are required for the `NewOAuthClient` test
 
+**NOTE**: `BITBUCKET_PASSWORD` must be an [app password](https://support.atlassian.com/bitbucket-cloud/docs/app-passwords/). If you use the account password, some tests will fail
 **NOTE**: if a test fails, it may leave dangling resources in your account so please bear this in mind.
+**NOTE**: Tests that create a group permission in a repository (resource `bitbucket_group_permission`) will fail when using OAuth authorization, because only app passwords can be used for that API, see [the official documentation](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-repositories/#api-repositories-workspace-repo-slug-permissions-config-groups-group-slug-put).
 
-If you have two-factor authentication enabled, then be sure to set up an [app password](https://support.atlassian.com/bitbucket-cloud/docs/app-passwords/) and use that instead.
-```shell
-$ BITBUCKET_USERNAME=myUsername BITBUCKET_PASSWORD=myPassword BITBUCKET_MEMBER_ACCOUNT_UUID=myMemberUUID make testacc
-```
 
 ### Documentation
 Every data source or resource added must have an accompanying docs page (see `docs` directory for examples).

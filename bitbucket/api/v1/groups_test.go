@@ -13,18 +13,16 @@ func TestGroups(t *testing.T) {
 		t.Skip("ENV TF_ACC=1 not set")
 	}
 
-	c := NewClient(&Auth{
-		Username: os.Getenv("BITBUCKET_USERNAME"),
-		Password: os.Getenv("BITBUCKET_PASSWORD"),
-	})
+	c := NewClient()
 
 	var groupResourceSlug string
 
 	name := "tf-bb-group-test" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
+	owner := os.Getenv("BITBUCKET_USERNAME")
 
 	t.Run("create", func(t *testing.T) {
 		opt := &GroupOptions{
-			OwnerUuid: c.Auth.Username,
+			OwnerUuid: owner,
 			Name:      name,
 		}
 
@@ -39,7 +37,7 @@ func TestGroups(t *testing.T) {
 
 	t.Run("get", func(t *testing.T) {
 		opt := &GroupOptions{
-			OwnerUuid: c.Auth.Username,
+			OwnerUuid: owner,
 			Slug:      groupResourceSlug,
 		}
 		group, err := c.Groups.Get(opt)
@@ -52,7 +50,7 @@ func TestGroups(t *testing.T) {
 
 	t.Run("update", func(t *testing.T) {
 		opt := &GroupOptions{
-			OwnerUuid:  c.Auth.Username,
+			OwnerUuid:  owner,
 			Slug:       groupResourceSlug,
 			Permission: "write",
 		}
@@ -66,7 +64,7 @@ func TestGroups(t *testing.T) {
 
 	t.Run("delete", func(t *testing.T) {
 		opt := &GroupOptions{
-			OwnerUuid: c.Auth.Username,
+			OwnerUuid: owner,
 			Slug:      groupResourceSlug,
 		}
 		err := c.Groups.Delete(opt)
@@ -79,18 +77,16 @@ func TestGroupsGracefullyHandleNoReturnedGroupsForInvalidSlug(t *testing.T) {
 		t.Skip("ENV TF_ACC=1 not set")
 	}
 
-	c := NewClient(&Auth{
-		Username: os.Getenv("BITBUCKET_USERNAME"),
-		Password: os.Getenv("BITBUCKET_PASSWORD"),
-	})
+	c := NewClient()
 
 	var groupResourceSlug string
 
 	name := "TF-BB-Group-Test"
+	owner := os.Getenv("BITBUCKET_USERNAME")
 
 	t.Run("create", func(t *testing.T) {
 		opt := &GroupOptions{
-			OwnerUuid: c.Auth.Username,
+			OwnerUuid: owner,
 			Name:      name,
 		}
 
@@ -105,7 +101,7 @@ func TestGroupsGracefullyHandleNoReturnedGroupsForInvalidSlug(t *testing.T) {
 
 	t.Run("get", func(t *testing.T) {
 		opt := &GroupOptions{
-			OwnerUuid: c.Auth.Username,
+			OwnerUuid: owner,
 			Slug:      name, // Slugs are lowercase and the BB's API is case-sensitive, this will trigger a fail response
 		}
 		group, err := c.Groups.Get(opt)
@@ -115,7 +111,7 @@ func TestGroupsGracefullyHandleNoReturnedGroupsForInvalidSlug(t *testing.T) {
 
 	t.Run("delete", func(t *testing.T) {
 		opt := &GroupOptions{
-			OwnerUuid: c.Auth.Username,
+			OwnerUuid: owner,
 			Slug:      groupResourceSlug,
 		}
 		err := c.Groups.Delete(opt)
