@@ -35,10 +35,7 @@ func TestAccBitbucketUserDataSource_basic(t *testing.T) {
 
 func getCurrentUser() (*gobb.User, error) {
 	if _, isSet := os.LookupEnv("TF_ACC"); isSet {
-		client := gobb.NewBasicAuth(
-			os.Getenv("BITBUCKET_USERNAME"),
-			os.Getenv("BITBUCKET_PASSWORD"),
-		)
+		client := NewClient()
 
 		return client.User.Profile()
 	} else {

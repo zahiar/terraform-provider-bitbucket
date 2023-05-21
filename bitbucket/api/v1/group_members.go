@@ -39,7 +39,7 @@ func (gm *GroupMembers) Get(gmo *GroupMemberOptions) ([]GroupMember, error) {
 		return nil, err
 	}
 
-	request.SetBasicAuth(gm.client.Auth.Username, gm.client.Auth.Password)
+	gm.client.Auth.SetRequestAuth(request)
 
 	response, err := gm.client.HttpClient.Do(request)
 	if err != nil {
@@ -68,7 +68,7 @@ func (gm *GroupMembers) Create(gmo *GroupMemberOptions) (*GroupMember, error) {
 		return nil, err
 	}
 
-	request.SetBasicAuth(gm.client.Auth.Username, gm.client.Auth.Password)
+	gm.client.Auth.SetRequestAuth(request)
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err := gm.client.HttpClient.Do(request)
@@ -98,7 +98,7 @@ func (gm *GroupMembers) Delete(gmo *GroupMemberOptions) error {
 		return err
 	}
 
-	request.SetBasicAuth(gm.client.Auth.Username, gm.client.Auth.Password)
+	gm.client.Auth.SetRequestAuth(request)
 
 	response, err := gm.client.HttpClient.Do(request)
 	if err != nil {

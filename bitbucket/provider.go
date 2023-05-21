@@ -15,15 +15,27 @@ func Provider() *schema.Provider {
 		Schema: map[string]*schema.Schema{
 			"username": {
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("BITBUCKET_USERNAME", nil),
 				Description: "Username to authenticate with Bitbucket.",
 			},
 			"password": {
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("BITBUCKET_PASSWORD", nil),
 				Description: "Password to authenticate with Bitbucket.",
+			},
+			"oauth_client_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("BITBUCKET_OAUTH_CLIENT_ID", nil),
+				Description: "Client ID for OAuth authentication with Bitbucket.",
+			},
+			"oauth_client_secret": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("BITBUCKET_OAUTH_CLIENT_SECRET", nil),
+				Description: "Client secret for OAuth authentication with Bitbucket.",
 			},
 		},
 
@@ -75,19 +87,34 @@ type Clients struct {
 }
 
 func configureProvider(ctx context.Context, resourceData *schema.ResourceData) (interface{}, diag.Diagnostics) {
-	client := gobb.NewBasicAuth(
-		resourceData.Get("username").(string),
-		resourceData.Get("password").(string),
-	)
+	username := resourceData.Get("username").(string)
+	password := resourceData.Get("password").(string)
+	oauthClientId := resourceData.Get("oauth_client_id").(string)
+	oauthClientSecret := resourceData.Get("oauth_client_secret").(string)
+
+	var client *gobb.Client
+	var v1Client *v1.Client
+
+	if username != "" && password != "" {
+		client = gobb.NewBasicAuth(username, password)
+		v1Client = v1.NewBasicAuthClient(username, password)
+	} else if oauthClientId != "" && oauthClientSecret != "" {
+		client = gobb.NewOAuthClientCredentials(oauthClientId, oauthClientSecret)
+		v1Client = v1.NewOAuthClient(oauthClientId, oauthClientSecret)
+	} else if username != "" && password == "" {
+		diag.Errorf("`username` is set but `password` is not.")
+	} else if username == "" && password != "" {
+		diag.Errorf("`password` is set but `username` is not.")
+	} else if oauthClientId != "" && oauthClientSecret == "" {
+		diag.Errorf("`oauth_client_id` is set but `oauth_client_secret` is not.")
+	} else if oauthClientId == "" && oauthClientSecret != "" {
+		diag.Errorf("`oauth_client_secret` is set but `oauth_client_id` is not.")
+	} else {
+		diag.Errorf("Either `username` and `password` or `oauth_client_id` and `oauth_client_secret` need to be set for acceptance tests")
+	}
+
 	client.Pagelen = 100
 	client.MaxDepth = 10
-
-	v1Client := v1.NewClient(
-		&v1.Auth{
-			Username: resourceData.Get("username").(string),
-			Password: resourceData.Get("password").(string),
-		},
-	)
 
 	clients := &Clients{
 		V1: v1Client,
