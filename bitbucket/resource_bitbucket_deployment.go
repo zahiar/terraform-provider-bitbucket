@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -94,6 +95,57 @@ func resourceBitbucketDeploymentRead(ctx context.Context, resourceData *schema.R
 	)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to get deployment environment with error: %s", err))
+	}
+
+	_ = resourceData.Set("name", deployment.Name)
+	_ = resourceData.Set("environment", gobb.RepositoryEnvironmentTypeOption(deployment.Rank).String())
+	resourceData.SetId(deployment.Uuid)
+
+	return nil
+}
+
+func resourceBitbucketDeploymentReadByNameOrId(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	id := resourceData.Get("id")
+	if id != nil && id != "" {
+		return resourceBitbucketDeploymentRead(ctx, resourceData, meta)
+	}
+
+	name := resourceData.Get("name")
+	if name != nil && name != "" {
+		return resourceBitbucketDeploymentReadByName(ctx, resourceData, meta)
+	}
+
+	return diag.Errorf("Either name or id must be provided")
+}
+
+func resourceBitbucketDeploymentReadByName(ctx context.Context, resourceData *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	// Artificial sleep due to Bitbucket's API taking time to return newly created deployments
+	time.Sleep(3 * time.Second)
+
+	client := meta.(*Clients).V2
+
+	deployments, err := client.Repositories.Repository.ListEnvironments(
+		&gobb.RepositoryEnvironmentsOptions{
+			Owner:    resourceData.Get("workspace").(string),
+			RepoSlug: resourceData.Get("repository").(string),
+		},
+	)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("unable to get deployment variable with error: %s", err))
+	}
+
+	name := resourceData.Get("name").(string)
+
+	var deployment *gobb.Environment
+	for _, item := range deployments.Environments {
+		if strings.EqualFold(item.Name, name) {
+			deployment = &item
+			break
+		}
+	}
+
+	if deployment == nil {
+		return diag.FromErr(errors.New("unable to get deployment, Bitbucket API did not return it"))
 	}
 
 	_ = resourceData.Set("name", deployment.Name)

@@ -6,12 +6,19 @@ import (
 
 func dataSourceBitbucketDeployment() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: resourceBitbucketDeploymentRead,
+		ReadContext: resourceBitbucketDeploymentReadByNameOrId,
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Description: "The ID of the deployment.",
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
+				Computed:    true,
+			},
+			"name": {
+				Description: "The name of the deployment environment.",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Computed:    true,
 			},
 			"workspace": {
 				Description: "The slug or UUID (including the enclosing `{}`) of the workspace.",
@@ -23,11 +30,6 @@ func dataSourceBitbucketDeployment() *schema.Resource {
 				Type:             schema.TypeString,
 				Required:         true,
 				ValidateDiagFunc: validateRepositoryName,
-			},
-			"name": {
-				Description: "The name of the deployment environment.",
-				Type:        schema.TypeString,
-				Computed:    true,
 			},
 			"environment": {
 				Description: "The environment of the deployment (will be one of 'Test', 'Staging', or 'Production').",

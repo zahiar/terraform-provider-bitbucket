@@ -108,6 +108,47 @@ func TestAccBitbucketDeploymentDataSource_basic(t *testing.T) {
 					data "bitbucket_workspace" "testacc" {
 						id = "%s"
 					}
+
+					resource "bitbucket_project" "testacc" {
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  name       = "%s"
+					  key        = "%s"
+					  is_private = true
+					}
+
+					resource "bitbucket_repository" "testacc" {
+					  workspace        = data.bitbucket_workspace.testacc.id
+					  project_key      = bitbucket_project.testacc.key
+					  name             = "%s"
+					  enable_pipelines = true
+					}
+
+					resource "bitbucket_deployment" "testacc" {
+					  workspace   = data.bitbucket_workspace.testacc.id
+					  repository  = bitbucket_repository.testacc.name
+					  name        = "%s"
+					  environment = "Production"
+					}
+
+					data "bitbucket_deployment" "testacc" {
+					  id         = bitbucket_deployment.testacc.id
+					  workspace  = data.bitbucket_workspace.testacc.id
+					  repository = bitbucket_repository.testacc.name
+					}`, workspaceSlug, projectName, projectKey, repoName, deploymentName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.bitbucket_deployment.testacc", "workspace", workspaceSlug),
+					resource.TestCheckResourceAttr("data.bitbucket_deployment.testacc", "repository", repoName),
+					resource.TestCheckResourceAttr("data.bitbucket_deployment.testacc", "name", deploymentName),
+					resource.TestCheckResourceAttr("data.bitbucket_deployment.testacc", "environment", "Production"),
+
+					resource.TestCheckResourceAttrSet("data.bitbucket_deployment.testacc", "id"),
+				),
+			},
+			{
+				Config: fmt.Sprintf(`
+					data "bitbucket_workspace" "testacc" {
+						id = "%s"
+					}
 	
 					resource "bitbucket_project" "testacc" {
 					  workspace  = data.bitbucket_workspace.testacc.id
@@ -131,10 +172,10 @@ func TestAccBitbucketDeploymentDataSource_basic(t *testing.T) {
 					}
 	
 					data "bitbucket_deployment" "testacc" {
-					  id         = bitbucket_deployment.testacc.id
+					  name         = "%s"
 					  workspace  = data.bitbucket_workspace.testacc.id
 					  repository = bitbucket_repository.testacc.name
-					}`, workspaceSlug, projectName, projectKey, repoName, deploymentName),
+					}`, workspaceSlug, projectName, projectKey, repoName, deploymentName, deploymentName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.bitbucket_deployment.testacc", "workspace", workspaceSlug),
 					resource.TestCheckResourceAttr("data.bitbucket_deployment.testacc", "repository", repoName),
