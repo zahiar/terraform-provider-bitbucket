@@ -59,6 +59,7 @@ tests to run, as Bitbucket's API will reject the account owner's UUID.
 * `BITBUCKET_USERNAME` - Username of the account to run the tests against
 * `BITBUCKET_PASSWORD` - Password of the account to run the tests against
 * `BITBUCKET_MEMBER_ACCOUNT_UUID` - Account UUID of the member who is part of your account
+* `BITBUCKET_WORKSPACE` - Set this, if the workspace name differs from the username.
 
 **NOTE**: if a test fails, it may leave dangling resources in your account so please bear this in mind.
 

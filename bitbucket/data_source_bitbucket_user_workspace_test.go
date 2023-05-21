@@ -9,7 +9,7 @@ import (
 )
 
 func TestAccBitbucketUserWorkspaceDataSource_basic(t *testing.T) {
-	workspace := os.Getenv("BITBUCKET_USERNAME")
+	workspace := os.Getenv("BITBUCKET_WORKSPACE")
 	user, _ := getCurrentUser()
 
 	resource.Test(t, resource.TestCase{

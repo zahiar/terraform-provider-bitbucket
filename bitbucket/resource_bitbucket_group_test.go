@@ -12,7 +12,7 @@ import (
 )
 
 func TestAccBitbucketGroupResource_basic(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	groupName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 
 	resource.Test(t, resource.TestCase{
@@ -54,7 +54,7 @@ func TestAccBitbucketGroupResource_basic(t *testing.T) {
 }
 
 func TestAccBitbucketGroupResource_changeName(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	groupName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	newGroupName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 
@@ -117,7 +117,7 @@ func TestAccBitbucketGroupResource_changeName(t *testing.T) {
 }
 
 func TestAccBitbucketGroupResource_changeProperties(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	groupName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 
 	resource.Test(t, resource.TestCase{
@@ -179,7 +179,7 @@ func TestAccBitbucketGroupResource_changeProperties(t *testing.T) {
 }
 
 func TestAccBitbucketGroupResource_withoutProperties(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	groupName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 
 	resource.Test(t, resource.TestCase{
