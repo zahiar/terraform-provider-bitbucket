@@ -12,7 +12,7 @@ import (
 )
 
 func TestAccBitbucketGroupMemberResource_basic(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	user, _ := getCurrentUser()
 	groupName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 

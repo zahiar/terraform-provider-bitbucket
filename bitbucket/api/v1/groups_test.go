@@ -21,10 +21,11 @@ func TestGroups(t *testing.T) {
 	var groupResourceSlug string
 
 	name := "tf-bb-group-test" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
+	owner := os.Getenv("BITBUCKET_WORKSPACE")
 
 	t.Run("create", func(t *testing.T) {
 		opt := &GroupOptions{
-			OwnerUuid: c.Auth.Username,
+			OwnerUuid: owner,
 			Name:      name,
 		}
 
@@ -66,7 +67,7 @@ func TestGroups(t *testing.T) {
 
 	t.Run("delete", func(t *testing.T) {
 		opt := &GroupOptions{
-			OwnerUuid: c.Auth.Username,
+			OwnerUuid: owner,
 			Slug:      groupResourceSlug,
 		}
 		err := c.Groups.Delete(opt)
@@ -87,10 +88,11 @@ func TestGroupsGracefullyHandleNoReturnedGroupsForInvalidSlug(t *testing.T) {
 	var groupResourceSlug string
 
 	name := "TF-BB-Group-Test"
+	owner := os.Getenv("BITBUCKET_WORKSPACE")
 
 	t.Run("create", func(t *testing.T) {
 		opt := &GroupOptions{
-			OwnerUuid: c.Auth.Username,
+			OwnerUuid: owner,
 			Name:      name,
 		}
 
@@ -105,7 +107,7 @@ func TestGroupsGracefullyHandleNoReturnedGroupsForInvalidSlug(t *testing.T) {
 
 	t.Run("get", func(t *testing.T) {
 		opt := &GroupOptions{
-			OwnerUuid: c.Auth.Username,
+			OwnerUuid: owner,
 			Slug:      name, // Slugs are lowercase and the BB's API is case-sensitive, this will trigger a fail response
 		}
 		group, err := c.Groups.Get(opt)
@@ -115,7 +117,7 @@ func TestGroupsGracefullyHandleNoReturnedGroupsForInvalidSlug(t *testing.T) {
 
 	t.Run("delete", func(t *testing.T) {
 		opt := &GroupOptions{
-			OwnerUuid: c.Auth.Username,
+			OwnerUuid: owner,
 			Slug:      groupResourceSlug,
 		}
 		err := c.Groups.Delete(opt)

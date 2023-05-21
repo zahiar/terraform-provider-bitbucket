@@ -14,7 +14,7 @@ import (
 )
 
 func TestAccBitbucketBranchRestrictionResource_basic(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	projectName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	projectKey := strings.ToUpper(acctest.RandStringFromCharSet(3, acctest.CharSetAlpha))
 	repoName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
@@ -77,7 +77,7 @@ func TestAccBitbucketBranchRestrictionResource_basic(t *testing.T) {
 }
 
 func TestAccBitbucketBranchRestrictionResource_withKindAndValueCombination(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	projectName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	projectKey := strings.ToUpper(acctest.RandStringFromCharSet(3, acctest.CharSetAlpha))
 	repoName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
@@ -142,7 +142,7 @@ func TestAccBitbucketBranchRestrictionResource_withKindAndValueCombination(t *te
 }
 
 func TestAccBitbucketBranchRestrictionResource_withUsers(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	projectName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	projectKey := strings.ToUpper(acctest.RandStringFromCharSet(3, acctest.CharSetAlpha))
 	repoName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
@@ -221,7 +221,7 @@ func TestAccBitbucketBranchRestrictionResource_withUsers(t *testing.T) {
 }
 
 func TestAccBitbucketBranchRestrictionResource_withGroups(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	projectName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	projectKey := strings.ToUpper(acctest.RandStringFromCharSet(3, acctest.CharSetAlpha))
 	repoName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
@@ -314,7 +314,7 @@ func TestAccBitbucketBranchRestrictionResource_withGroups(t *testing.T) {
 }
 
 func TestAccBitbucketBranchRestrictionResource_withUsersAndGroups(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	projectName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	projectKey := strings.ToUpper(acctest.RandStringFromCharSet(3, acctest.CharSetAlpha))
 	repoName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
@@ -410,7 +410,7 @@ func TestAccBitbucketBranchRestrictionResource_withUsersAndGroups(t *testing.T) 
 }
 
 func TestAccBitbucketBranchRestrictionResource_withEmptyUsersAndEmptyGroups(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	projectName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	projectKey := strings.ToUpper(acctest.RandStringFromCharSet(3, acctest.CharSetAlpha))
 	repoName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)

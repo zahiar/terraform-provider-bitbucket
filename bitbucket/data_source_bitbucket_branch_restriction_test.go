@@ -12,7 +12,7 @@ import (
 )
 
 func TestAccBitbucketBranchRestrictionDataSource_basic(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	projectName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	projectKey := strings.ToUpper(acctest.RandStringFromCharSet(3, acctest.CharSetAlpha))
 	repoName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
@@ -71,7 +71,7 @@ func TestAccBitbucketBranchRestrictionDataSource_basic(t *testing.T) {
 }
 
 func TestAccBitbucketBranchRestrictionDataSource_withKindAndValueCombination(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	projectName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	projectKey := strings.ToUpper(acctest.RandStringFromCharSet(3, acctest.CharSetAlpha))
 	repoName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)

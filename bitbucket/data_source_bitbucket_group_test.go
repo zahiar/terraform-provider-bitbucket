@@ -10,7 +10,7 @@ import (
 )
 
 func TestAccBitbucketGroupDataSource_basic(t *testing.T) {
-	workspaceSlug := os.Getenv("BITBUCKET_USERNAME")
+	workspaceSlug := os.Getenv("BITBUCKET_WORKSPACE")
 	groupName := "tf-acc-test-" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 
 	resource.Test(t, resource.TestCase{

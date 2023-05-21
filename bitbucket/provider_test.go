@@ -12,6 +12,11 @@ var testAccProvider *schema.Provider
 var testAccProviders map[string]func() (*schema.Provider, error)
 
 func init() {
+	workspace := os.Getenv("BITBUCKET_WORKSPACE")
+	if workspace == "" {
+		os.Setenv("BITBUCKET_WORKSPACE", os.Getenv("BITBUCKET_USERNAME"))
+	}
+
 	testAccProvider = Provider()
 	testAccProviders = map[string]func() (*schema.Provider, error){
 		"bitbucket": func() (*schema.Provider, error) {

@@ -19,11 +19,12 @@ func TestGroupMembers(t *testing.T) {
 	})
 
 	var group *Group
+	owner := os.Getenv("BITBUCKET_WORKSPACE")
 
 	t.Run("setup", func(t *testing.T) {
 		group, _ = c.Groups.Create(
 			&GroupOptions{
-				OwnerUuid: c.Auth.Username,
+				OwnerUuid: owner,
 				Name:      "tf-bb-group-members-test" + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum),
 			},
 		)
@@ -33,7 +34,7 @@ func TestGroupMembers(t *testing.T) {
 	t.Run("create", func(t *testing.T) {
 		result, err := c.GroupMembers.Create(
 			&GroupMemberOptions{
-				OwnerUuid: c.Auth.Username,
+				OwnerUuid: owner,
 				Slug:      group.Slug,
 				UserUuid:  group.Owner.Uuid,
 			},
@@ -47,7 +48,7 @@ func TestGroupMembers(t *testing.T) {
 	t.Run("get", func(t *testing.T) {
 		members, err := c.GroupMembers.Get(
 			&GroupMemberOptions{
-				OwnerUuid: c.Auth.Username,
+				OwnerUuid: owner,
 				Slug:      group.Slug,
 			},
 		)
@@ -60,7 +61,7 @@ func TestGroupMembers(t *testing.T) {
 	t.Run("delete", func(t *testing.T) {
 		err := c.GroupMembers.Delete(
 			&GroupMemberOptions{
-				OwnerUuid: c.Auth.Username,
+				OwnerUuid: owner,
 				Slug:      group.Slug,
 				UserUuid:  group.Owner.Uuid,
 			},
@@ -69,7 +70,7 @@ func TestGroupMembers(t *testing.T) {
 
 		members, err := c.GroupMembers.Get(
 			&GroupMemberOptions{
-				OwnerUuid: c.Auth.Username,
+				OwnerUuid: owner,
 				Slug:      group.Slug,
 			},
 		)
@@ -79,7 +80,7 @@ func TestGroupMembers(t *testing.T) {
 
 	t.Run("teardown", func(t *testing.T) {
 		opt := &GroupOptions{
-			OwnerUuid: c.Auth.Username,
+			OwnerUuid: owner,
 			Slug:      group.Slug,
 		}
 		err := c.Groups.Delete(opt)
