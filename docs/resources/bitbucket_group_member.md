@@ -25,5 +25,5 @@ Bitbucket group members can be imported with a combination of its workspace UUID
 
 ### Example using workspace UUID, group slug & user UUID
 ```sh
-$ terraform import bitbucket_group_permission.example "{123ab4cd-5678-9e01-f234-5678g9h01i2j}/example-group/{123ab4cd-5678-9e01-f234-5678g9h01i2j}"
+$ terraform import bitbucket_group_member.example "{123ab4cd-5678-9e01-f234-5678g9h01i2j}/example-group/{123ab4cd-5678-9e01-f234-5678g9h01i2j}"
 ```
