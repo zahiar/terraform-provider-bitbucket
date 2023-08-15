@@ -36,6 +36,7 @@ func resourceBitbucketPipelineVariable() *schema.Resource {
 				Description:      "The name of the repository (must consist of only lowercase ASCII letters, numbers, underscores and hyphens).",
 				Type:             schema.TypeString,
 				Required:         true,
+				ForceNew:         true,
 				ValidateDiagFunc: validateRepositoryName,
 			},
 			"key": {
