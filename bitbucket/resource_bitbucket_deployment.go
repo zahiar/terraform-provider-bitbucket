@@ -97,7 +97,7 @@ func resourceBitbucketDeploymentRead(ctx context.Context, resourceData *schema.R
 	}
 
 	_ = resourceData.Set("name", deployment.Name)
-	_ = resourceData.Set("environment", gobb.RepositoryEnvironmentTypeOption(deployment.Rank).String())
+	_ = resourceData.Set("environment", gobb.RepositoryEnvironmentTypeOption(deployment.EnvironmentType.Rank).String())
 	resourceData.SetId(deployment.Uuid)
 
 	return nil
